@@ -10,5 +10,9 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'escolher-servico',
+    loadComponent: () => import('./servicos/servicos.page').then( m => m.ServicosPage)
+  },
 
 ];
