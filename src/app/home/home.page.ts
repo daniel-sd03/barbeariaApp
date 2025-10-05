@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import {IonContent, IonButton, IonCardContent,
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonIcon } from '@ionic/angular/standalone';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonIcon,IonMenu } from '@ionic/angular/standalone';
+import { RouterLinkWithHref } from '@angular/router';
 import { HeaderComponent } from '../componentes/header/header.component';
 import { addIcons } from 'ionicons';
 import { reorderThreeOutline} from 'ionicons/icons';
+import { MenuComponent } from '../componentes/menu/menu.component';
+import { MenuController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +15,15 @@ import { reorderThreeOutline} from 'ionicons/icons';
   standalone: true,
   imports: [IonContent, IonButton, IonCardContent,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
-    RouterLinkWithHref, HeaderComponent, IonIcon],
+    RouterLinkWithHref, HeaderComponent, IonIcon, IonMenu, MenuComponent],
 })
+
 export class HomePage {
-  constructor() {
-    addIcons({reorderThreeOutline});
+  constructor(private menu: MenuController) {
+    addIcons({ reorderThreeOutline });
+  }
+
+  abrirMenu() {
+    this.menu.open('main-menu');
   }
 }

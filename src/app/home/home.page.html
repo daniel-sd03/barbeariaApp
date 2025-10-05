@@ -1,12 +1,16 @@
   <app-header>
     <span titulo>Barbearia</span>
-    <ion-button botao>
+    <ion-button botao (click)="abrirMenu()">
       <ion-icon name="reorder-three-outline" size="large"></ion-icon>
     </ion-button>
   </app-header>
 
-<ion-content>
-  <!-- Conteúdo normal -->
+  <!-- Menu lateral -->
+<ion-menu side="start" menuId="main-menu" contentId="main-content">
+  <app-menu></app-menu>
+</ion-menu>
+
+<ion-content id="main-content">
   <ion-card>
     <ion-card-header>
       <ion-card-title>Daniel</ion-card-title>
@@ -14,7 +18,7 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p>
+      <p> 
         <a target="_blank" rel="noopener noreferrer"
            href="https://ionicframework.com/docs/components">
           UI Components
