@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Opções do menu-->
+<ion-list>
+  <ion-menu-toggle auto-hide="true">
+    <ion-item button [routerLink]="'//'">Produtos</ion-item>
+  </ion-menu-toggle>
+
+  <ion-menu-toggle auto-hide="true">
+    <ion-item button [routerLink]="'//'">Configurações</ion-item>
+  </ion-menu-toggle>
+
+  <!-- Sub menu-->
+  <ion-accordion-group>
+    <ion-accordion>
+      <ion-item slot="header">
+        Opções de administrador
+      </ion-item>
+
+      <!--Opções do sub menu-->
+      <ion-list slot="content" class="submenu">
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="'/opcao1'">Opção 1</ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="'/opcao2'">Opção 2</ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="'/opcao3'">Opção 3</ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ion-menu-toggle auto-hide="true">
+    <ion-item button>Sair</ion-item>
+  </ion-menu-toggle>
+</ion-list>
