@@ -1,13 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Primeiro aplicativo
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+  <app-header>
+    <span titulo>Barbearia</span>
+    <ion-button botao>
+      <ion-icon name="reorder-three-outline" size="large"></ion-icon>
+    </ion-button>
+  </app-header>
 
-<ion-content [fullscreen]="true">
-
+<ion-content>
   <!-- Conteúdo normal -->
   <ion-card>
     <ion-card-header>
@@ -29,13 +27,7 @@
     [routerLink]="'/escolher-servico/'"
     shape="round"
     color="primary"
-    style="
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    ">
+    class="botao-agendar">
     Agendar
   </ion-button>
 

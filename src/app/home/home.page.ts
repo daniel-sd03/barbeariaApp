@@ -1,16 +1,22 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonCardContent,
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/angular/standalone';
+import {IonContent, IonButton, IonCardContent,
+  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonIcon } from '@ionic/angular/standalone';
 import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { HeaderComponent } from '../componentes/header/header.component';
+import { addIcons } from 'ionicons';
+import { reorderThreeOutline} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonCardContent,
-     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, RouterLinkWithHref],
+  imports: [IonContent, IonButton, IonCardContent,
+    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
+    RouterLinkWithHref, HeaderComponent, IonIcon],
 })
 export class HomePage {
-  constructor() {}
+  constructor() {
+    addIcons({reorderThreeOutline});
+  }
 }
