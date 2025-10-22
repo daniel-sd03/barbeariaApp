@@ -1,0 +1,19 @@
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <h2>Entrar</h2>
+
+    <label class="input-label">Usuário ou e-mail</label>
+    <ion-input [(ngModel)]="username" type="text" class="input-field"></ion-input>
+
+    <label class="input-label">Senha</label>
+    <ion-input [(ngModel)]="password"  type="password" class="input-field"></ion-input>
+
+    <ion-button (click)="login()" expand="block" class="custom-button">
+      ACESSAR
+    </ion-button>
+
+    <div class="signup-link">
+      <p>Ainda não possui uma conta? <a [routerLink]="'/cadastro-usuario'" >cadastre-se</a></p>
+    </div>
+  </div>
+</ion-content>
