@@ -1,20 +1,19 @@
 <ion-header>
   <ion-toolbar>
-
     <!-- Ícone à Direita -->
-    <ion-buttons slot="end">
+    <ion-button slot="end">
       <img class="bigode-icon" src="assets/icon/bigode-icon.png" alt="bigode-icon">
-    </ion-buttons>
+    </ion-button>
 
     <!-- Título centralizado -->
     <ion-title>
       <ng-content select="[titulo]"></ng-content>
     </ion-title>
 
-    <!-- Botões opcionais à esquerda -->
-    <ion-buttons slot="start">
-      <ng-content select="[botao]"></ng-content>
+    <!-- Botao opcional à esquerda -->
+    <ion-buttons slot="start" >
+      <ng-content select="[icon-botao]"></ng-content>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
+

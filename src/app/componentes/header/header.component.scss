@@ -1,4 +1,19 @@
+:host {
+  display: block;
+  --header-bg: #000000;
+}
+
 .bigode-icon{
   height: 60px;
   width: 70px;
+}
+
+ion-toolbar {
+  --background: var(--header-bg);
+  --min-height: 52px;   
+  height: var(--min-height);
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  position: relative; 
 }
