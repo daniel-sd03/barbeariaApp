@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import {IonContent, IonButton, IonCardContent,
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonIcon,IonMenu } from '@ionic/angular/standalone';
+import { Component, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { IonContent, IonButton, IonIcon, IonMenu, IonItem, IonFooter, IonToolbar } from '@ionic/angular/standalone';
 import { RouterLinkWithHref } from '@angular/router';
 import { HeaderComponent } from '../componentes/header/header.component';
 import { addIcons } from 'ionicons';
@@ -13,9 +12,9 @@ import { MenuController } from '@ionic/angular/standalone';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonContent, IonButton, IonCardContent,
-    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
-    RouterLinkWithHref, HeaderComponent, IonIcon, IonMenu, MenuComponent],
+  imports: [IonContent, IonButton, HeaderComponent, IonIcon,
+    IonMenu, MenuComponent, IonItem, IonFooter, IonToolbar, RouterLinkWithHref],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
 export class HomePage {

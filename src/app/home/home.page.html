@@ -1,38 +1,85 @@
-  <app-header>
-    <span titulo>Barbearia</span>
-    <ion-button botao (click)="abrirMenu()">
-      <ion-icon name="reorder-three-outline" size="large"></ion-icon>
-    </ion-button>
-  </app-header>
+<app-header>
+  <span titulo>Barbearia</span>
+  <ion-button icon-botao (click)="abrirMenu()">
+    <ion-icon name="reorder-three-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
 
-  <!-- Menu lateral -->
+<!-- Menu lateral -->
 <ion-menu side="start" menuId="main-menu" contentId="main-content">
   <app-menu></app-menu>
 </ion-menu>
 
 <ion-content id="main-content">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Daniel</ion-card-title>
-      <ion-card-subtitle>Bem-vindo à barbearia</ion-card-subtitle>
-    </ion-card-header>
+  <h2>Escolha seu corte favorito</h2>
 
-    <ion-card-content>
-      <p> 
-        <a target="_blank" rel="noopener noreferrer"
-           href="https://ionicframework.com/docs/components">
-          UI Components
-        </a>
-      </p>
-    </ion-card-content>
-  </ion-card>
+   <swiper-container class="my-carousel"
+                    [slidesPerView]="1"
+                    [loop]="true"
+                    [autoplay]="true"
+                    [pagination]="true">
 
-   <ion-button
-    [routerLink]="'/escolher-servico/'"
-    shape="round"
-    color="primary"
-    class="botao-agendar">
-    Agendar
-  </ion-button>
+    <swiper-slide>
+      <img src="assets/fotos/cortes/corte01.jpeg" alt="Foto corte 1" class="slide-image">
+    </swiper-slide>
+
+    <swiper-slide>
+      <img src="assets/fotos/cortes/corte02.jpeg" alt="Foto corte 2" class="slide-image">
+    </swiper-slide>
+
+    <swiper-slide>
+      <img src="assets/fotos/cortes/corte04.jpeg" alt="Foto corte 4" class="slide-image">
+    </swiper-slide>
+
+     <swiper-slide>
+      <img src="assets/fotos/cortes/corte03.jpeg" alt="Foto corte 3" class="slide-image">
+    </swiper-slide>
+
+  </swiper-container>
+
+  <h3>Horários de Funcionamento</h3>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Segunda</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Terça</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Quarta</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Quinta</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Sexta</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Sábado</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
+
+  <ion-item class="linha-horario">
+    <div class="dia">Domingo</div>
+    <div class="horario" slot="end">ABERTO</div>
+  </ion-item>
 
 </ion-content>
+
+<ion-footer class="home-footer" role="contentinfo">
+  <ion-toolbar>
+    <ion-button [routerLink]="'/escolher-servico'" expand="block" class="custom-button">
+      Marcar
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

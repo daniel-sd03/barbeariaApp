@@ -1,36 +1,57 @@
-#container {
+h2 {
   text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 12px 0;
+  text-align: left;
+  padding-left: 16px;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  color: #8c8c8c;
-  margin: 0;
+/* Carousel */
+.my-carousel {
+  width: 90%;
+  height: 500px;
+  margin: 0 auto 20px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-#container a {
-  text-decoration: none;
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.botao-agendar {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+/* Pontinhos do Swiper (mantém se quiser customizar) */
+swiper-container::part(bullet-active) {
+  background: var(--ion-color-primary, #3880ff);
 }
 
-ion-icon{
-  color: #ffffff;
+/* footer */
+.home-footer{
+  --border-width: 0;
+  background: transparent;
+}
+
+.home-footer ion-toolbar {
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 16px;
+}
+
+.home-footer .custom-button {
+  width: min(90%, 150px);
+  max-width: 200px;
+  margin: 0 auto;
+  height: 20px;
+  font-size: 14px;
+  border-radius: 8px;
 }
