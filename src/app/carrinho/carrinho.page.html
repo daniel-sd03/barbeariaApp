@@ -1,0 +1,45 @@
+<app-header>
+  <span titulo>Carrinho</span>
+  <ion-button icon-botao [routerLink]="'/produtos'" botao>
+    <ion-icon name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let p of produtos; trackBy: trackById" class="produto-item">
+      <ion-thumbnail slot="start" class="card-image-box">
+        <img [src]="p.imagem" [alt]="p.nome" class="slide-image" />
+      </ion-thumbnail>
+
+      <ion-label class="produto-info">
+        <h3>{{ p.nome }}</h3>
+        <p>Preço unitário: {{ p.preco | currency:'BRL':'symbol':'1.2-2' }}</p>
+
+        <div class="produto-controls">
+          <ion-input type="number" min="1" [ngModel]="p.quantidade"
+                     (ngModelChange)="atualizarQuantidade(p.id, $event)" style="width:70px">
+          </ion-input>
+
+          <span class="subtotal">Subtotal: {{ (p.preco * p.quantidade) | currency:'BRL':'symbol':'1.2-2' }}</span>
+
+          <ion-button fill="clear" (click)="removerProduto(p.id)" aria-label="Remover item">
+            Remover
+          </ion-button>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="container">
+    <div class="bottom-section">
+      <div class="total-container">
+        <h3>Total a pagar: {{ total | currency:'BRL':'symbol':'1.2-2' }}</h3>
+      </div>
+
+      <ion-button expand="block" class="custom-button" (click)="finalizarCompra()" [disabled]="produtos.length === 0">
+        Pagar
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
