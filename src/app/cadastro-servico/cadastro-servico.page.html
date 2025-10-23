@@ -1,0 +1,35 @@
+<app-header>
+  <span titulo>Cadastro dos Serviços</span>
+  <ion-button icon-botao [routerLink]="'/'" botao>
+    <ion-icon name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input label="Nome do Serviço" type="text"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input label="Descrição" type="text"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input label="Preço" type="number"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input label="Duração Estimada" type="text" placeholder="Ex: 1h"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-select label="Profissionais que realizam" placeholder="Selecione">
+      <ion-select-option value="john">John</ion-select-option>
+      <ion-select-option value="maria">Maria</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button [routerLink]="'/'" expand="block" class="custom-button">
+    Cadastrar
+  </ion-button>
+</ion-content>
