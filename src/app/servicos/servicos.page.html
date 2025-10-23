@@ -1,13 +1,43 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>servicos</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header>
+  <span titulo>Serviços</span>
+  <ion-button icon-botao [routerLink]="'/'" botao>
+    <ion-icon name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">servicos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <h2>Escolha o serviço desejado</h2>
+  <div class="servicos-container">
+    <!-- Loading / erro simples usando ngIf + async (opcionalmente troque por um spinner) -->
+    <ng-container *ngIf="servicos$ | async as servicos; else loading">
+      <ion-list>
+        <ion-item class="item-container" *ngFor="let servico of servicos; trackBy: trackById">
+          <!-- imagem do serviço (ion-thumbnail / ion-img para lazy loading) -->
+          <ion-thumbnail slot="start" class="card-image-box">
+            <!-- ion-img carrega lazy por padrão no Ionic -->
+            <ion-img [src]="servico.imagem || 'assets/fotos/placeholder.jpg'" alt="{{servico.titulo}}"></ion-img>
+          </ion-thumbnail>
+
+          <!-- informação -->
+          <ion-label class="servico-info">
+            <h3>{{ servico.titulo }}</h3>
+            <p>R$ {{servico.preco}}</p>
+            <p>{{ servico.duracao }}</p>
+          </ion-label>
+
+          <!-- botão que leva para/agendamento - passando id via query param -->
+          <ion-button slot="end" fill="clear" [routerLink]="['/agendamento']" [queryParams]="{ servicoId: servico.id }" 
+            class="icon-botao">
+            <ion-icon name="caret-forward-circle-outline" size="large"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading-wrapper">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    </ng-template>
+  </div>
 </ion-content>
