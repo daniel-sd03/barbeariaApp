@@ -1,0 +1,33 @@
+<app-header>
+  <span titulo>Produtos</span>
+  <ion-button icon-botao [routerLink]="'/agendamento'" botao>
+    <ion-icon  name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item class="produto-item" *ngFor="let p of (produtos$ | async); trackBy: trackById">
+      <ion-thumbnail slot="start" class="card-image-box">
+        <img [src]="p.imagem" [alt]="p.nome">
+      </ion-thumbnail>
+
+      <ion-label class="produto-info">
+        <h3>{{ p.nome }}</h3>
+        <p>Preço: {{ formatPreco(p.preco) }}</p>
+      </ion-label>
+
+      <ion-button slot="end" color="black" (click)="adicionar(p)" [attr.aria-label]="'Adicionar ' + p.nome" class="icon-botao">
+        <ion-icon name="add-circle-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="home-footer" role="contentinfo">
+  <ion-toolbar>
+    <ion-button [routerLink]="'/carrinho-de-compra'" expand="block" class="custom-button">
+      Finalizar
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

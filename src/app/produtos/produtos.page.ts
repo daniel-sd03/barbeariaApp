@@ -1,0 +1,45 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { closeOutline, addCircleOutline} from 'ionicons/icons';
+import { HeaderComponent } from '../componentes/header/header.component';
+import { RouterLinkWithHref } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Produto } from '../interfaces/produto';
+import { ProdutoService } from '../services/produtoService/produto.service';
+import { CarrinhoService } from '../services/carrinhoService/carrinho.service';
+
+@Component({
+  selector: 'app-produtos',
+  templateUrl: './produtos.page.html',
+  styleUrls: ['./produtos.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+})
+
+export class ProdutosPage {
+  produtos$: Observable<Produto[]>;
+
+  constructor(
+    private produtoService: ProdutoService,
+    private carrinhoService: CarrinhoService
+  ) {
+    addIcons({closeOutline, addCircleOutline})
+    this.produtos$ = this.produtoService.getProdutos();
+  }
+
+  adicionar(prod: Produto) {
+    this.carrinhoService.addToCart(prod);
+    // feedback simples (poderia ser toast)
+    console.log('Adicionado ao carrinho:', prod.nome);
+  }
+
+  trackById(index: number, item: Produto) { return item.id; }
+
+  // util para formatação de preço (opcional)
+  formatPreco(valor: number) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+}

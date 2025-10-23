@@ -1,0 +1,70 @@
+/* ----- Título ----- */
+h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* ----- Item do produto ----- */
+.produto-item {
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+/* container de texto do produto */
+.produto-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.produto-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.produto-info p {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--muted-color, #666);
+}
+
+/* thumbnail / caixa da imagem */
+.card-image-box {
+  width: 80px;
+  height: 80px;
+  min-width: 56px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-right: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+/* garante que a imagem preencha e não distorça */
+.card-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* botão finalizar */
+.custom-button {
+  height: 40px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 420px) {
+  .card-image-box {
+    width: 64px;
+    height: 64px;
+    min-width: 56px;
+  }
+
+  .custom-button {
+    height: 36px;
+    font-size: 13px;
+  }
+}
