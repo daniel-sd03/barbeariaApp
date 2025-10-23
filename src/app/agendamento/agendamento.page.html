@@ -1,0 +1,60 @@
+<app-header>
+  <span titulo>Agendamento</span>
+  <ion-button icon-botao [routerLink]="'/escolher-servico'" botao>
+    <ion-icon name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <div class="agendamento-container">
+    <h1 class="mes-atual" >{{mesAtual}}</h1>
+    <!-- controles: selector de data e semana -->
+    <div class="datas">
+      <ion-button *ngFor="let dia of semana" (click)="onSelectDate(dia)"
+        [class.active]="getISO(dia) === getISO(selectedDate)" shape="round" fill="solid">
+        <div class="data-botao">
+          <span class="dia-semana">{{ dia.toLocaleDateString('pt-BR', { weekday: 'short' }) }}</span>
+          <span class="numero-dia">{{ dia.getDate() }}</span>
+        </div>
+      </ion-button>
+    </div>
+
+    <h3>Escolha o Profissional</h3>
+
+    <ion-list>
+      <ion-item class="profissional-item" *ngFor="let prof of (profissionais$ | async); trackBy: trackByProf">
+        <ion-thumbnail slot="start" class="card-image-box">
+          <img [src]="prof.foto" alt="{{prof.nome}}">
+        </ion-thumbnail>
+
+        <ion-label class="profissional-info">
+          <h4>{{ prof.nome }}</h4>
+
+          <div class="horarios">
+            <ng-container *ngIf="(horariosDisponiveis(prof, getISO(selectedDate)) || []).length; else semHorarios">
+              <ion-button *ngFor="let h of horariosDisponiveis(prof, getISO(selectedDate))" size="small" shape="round"
+                fill="outline" (click)="selecionarHorario(prof, getISO(selectedDate), h)">
+                {{ h }}
+              </ion-button>
+            </ng-container>
+            <ng-template #semHorarios>
+              <span class="no-times">Sem horários</span>
+            </ng-template>
+          </div>
+        </ion-label>
+
+      </ion-item>
+    </ion-list>
+
+    <!-- Cartão simples de confirmação na parte inferior (aparece quando selecionado) -->
+    <div *ngIf="selectedProfissional && selectedHorario" class="confirm-box">
+      <p>Confirmar:</p>
+      <strong>{{ selectedProfissional.nome }}</strong>
+      <p>{{ selectedDataISO }} — {{ selectedHorario }}</p>
+      <ion-button expand="block" [routerLink]="'/produtos'">
+        Confirmar agendamento
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

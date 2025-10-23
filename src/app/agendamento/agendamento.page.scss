@@ -1,0 +1,122 @@
+/* ========= Faixa de dias (principal) ========= */
+.datas {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px 4px;
+  min-height: 100px;
+  -webkit-overflow-scrolling: touch;
+  align-items: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.data-botao{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.datas ion-button {
+  flex: 0 0 auto;
+  width: 90px;
+  height: 150px;
+  --border-radius: 18px;
+  border-radius: 18px;
+  padding: 4px;
+}
+
+.datas ion-button .dia-semana {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.datas ion-button .numero-dia {
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.datas ion-button.active {
+  background: var(--color-primary);
+  color: var(--color-text);
+  border-color: transparent;
+}
+/* Barra de rolagem estética (opcional) */
+.datas::-webkit-scrollbar {
+   display: none;
+}
+
+.mes-atual{
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ========= Profissionais / Lista ========= */
+.profissional-item {
+  margin-bottom: 12px;
+}
+
+/* Caixa da imagem (thumbnail) */
+.card-image-box {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* imagem dentro da caixa */
+.card-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* informações do profissional */
+.profissional-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* horários em linha */
+.horarios {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* texto quando não há horários */
+.no-times {
+  color: #999;
+  font-size: 14px;
+}
+
+/* caixa de confirmação fixa */
+.confirm-box {
+  position: sticky;
+  bottom: 12px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ajustes responsivos */
+@media (max-width: 420px) {
+  .datas ion-button {
+    min-width: 60px;
+    padding: 6px 8px;
+  }
+  .card-image-box {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+}
