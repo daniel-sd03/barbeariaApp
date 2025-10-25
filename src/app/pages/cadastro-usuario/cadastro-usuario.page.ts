@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './cadastro-usuario.page.html',
   styleUrls: ['./cadastro-usuario.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref,  ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref, ReactiveFormsModule]
 })
 
 export class CadastroUsuarioPage implements OnInit {
@@ -64,15 +64,33 @@ export class CadastroUsuarioPage implements OnInit {
     try {
       const user = await this.UsuarioService.cadastrarUsuario(this.credentials.value);
       await loading.dismiss();
+
       if (user) {
         this.router.navigateByUrl('/login', { replaceUrl: true });
-      } else {
-      this.erroCadastro = 'Falha no registro. Tente novamente!<br>Caso o erro persista, entre em contato conosco.';
-    }
+      }
     } catch (error: any) {
       await loading.dismiss();
-      this.erroCadastro = 'Falha no registro. Tente novamente!<br>Caso o erro persista, entre em contato conosco.';
-      console.log(error.message )
+
+      const erroObj = this.tratarErro(error);
+      this.erroCadastro = erroObj.message;
+      if (erroObj.level === 'warn') console.warn("[CadastroUsuarioPage]", error.code, error.message);
+      else console.error("[CadastroUsuarioPage] erro inesperado:", error);
+
     }
   }
+
+  tratarErro(error: any) {
+    const code = error?.code;
+    switch (code) {
+      case 'auth/email-already-in-use':
+        return { message: 'Este e-mail já está cadastrado.', level: 'warn' };
+      case 'auth/invalid-email':
+        return { message: 'E-mail inválido.', level: 'warn' };
+      case 'auth/weak-password':
+        return { message: 'Senha fraca. Use no mínimo 6 caracteres.', level: 'warn' };
+      default:
+        return { message: 'Falha no registro. Tente novamente!', level: 'error' };
+    }
+  }
+
 }

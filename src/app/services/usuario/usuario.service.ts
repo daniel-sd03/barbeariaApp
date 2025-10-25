@@ -7,7 +7,7 @@ import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 })
 export class UsuarioService {
 
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  constructor(private auth: Auth, private firestore: Firestore) { }
 
   async cadastrarUsuario(userData: {
     nome: string,
@@ -18,22 +18,22 @@ export class UsuarioService {
     role?: string
   }) {
     try {
-    // Cria usuário no Firebase Auth
-    const cred = await createUserWithEmailAndPassword(this.auth, userData.email, userData.senha);
+      // Cria usuário no Firebase Auth
+      const cred = await createUserWithEmailAndPassword(this.auth, userData.email, userData.senha);
 
-    // Salva dados adicionais no Firestore
-    await setDoc(doc(this.firestore, 'usuarios', cred.user.uid), {
-      nome: userData.nome,
-      telefone: userData.telefone,
-      cpf: userData.cpf,
-      email: userData.email,
-      role: userData.role || 'User'
-    });
+      // Salva dados adicionais no Firestore
+      await setDoc(doc(this.firestore, 'usuarios', cred.user.uid), {
+        nome: userData.nome,
+        telefone: userData.telefone,
+        cpf: userData.cpf,
+        email: userData.email,
+        role: userData.role || 'User'
+      });
 
-    return cred.user;
+      return cred.user;
     } catch (error: any) {
-      console.log(error.message);
-      return null;
+      console.error("erro ao tentar cadastrar usuário (usuario.service): " + error);
+      throw error;
     }
   }
 }
