@@ -13,7 +13,7 @@ import { AuthService } from '../services/autenticador/auth.service';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, RouterLinkWithHref]
 })
-export class LoginPage{
+export class LoginPage {
   username = '';
   password = '';
   redirectTo: string | null = null;
@@ -22,14 +22,18 @@ export class LoginPage{
     this.redirectTo = this.route.snapshot.queryParamMap.get('redirectTo');
   }
 
-  login() {
-    if (this.auth.login(this.username, this.password)) {
-      // se veio redirectTo, vai pra lá; senão vai pra home
-      const target = this.redirectTo || '/home';
-      this.router.navigateByUrl(target);
-    } else {
-      // trate o erro (toast/modal)
-      alert('Usuário ou senha inválidos');
+  async login() {
+    try {
+      const success = await this.auth.login(this.username, this.password);
+      if (success) {
+        const target = this.redirectTo || '/home';
+        this.router.navigateByUrl(target);
+      } else {
+        alert('Usuário ou senha inválidos');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Erro no login');
     }
   }
 }
