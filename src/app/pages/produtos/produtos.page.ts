@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline, addCircleOutline} from 'ionicons/icons';
-import { HeaderComponent } from '../componentes/header/header.component';
+import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Produto } from '../interfaces/produto';
-import { ProdutoService } from '../services/produtoService/produto.service';
-import { CarrinhoService } from '../services/carrinhoService/carrinho.service';
+import { Produto } from '../../interfaces/produto';
+import { ProdutoService } from '../../services/produtoService/produto.service';
+import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
 
 @Component({
   selector: 'app-produtos',

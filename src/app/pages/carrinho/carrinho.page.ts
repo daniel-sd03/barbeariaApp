@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
-import { HeaderComponent } from '../componentes/header/header.component';
+import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Produto } from 'src/app/interfaces/produto';
-import { CarrinhoService } from '../services/carrinhoService/carrinho.service';
+import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
 
 @Component({
   selector: 'app-carrinho-de-compra',

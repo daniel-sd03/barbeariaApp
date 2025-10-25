@@ -15,45 +15,45 @@ export const routes: Routes = [
   },
   {
     path: 'escolher-servico',
-    loadComponent: () => import('./servicos/servicos.page').then( m => m.ServicosPage),
+    loadComponent: () => import('./pages/servicos/servicos.page').then( m => m.ServicosPage),
     canActivate: [AuthGuard]
   },
   {
     path: 'agendamento',
-    loadComponent: () => import('./agendamento/agendamento.page').then( m => m.AgendamentoPage),
+    loadComponent: () => import('./pages/agendamento/agendamento.page').then( m => m.AgendamentoPage),
     canActivate: [AuthGuard]
   },
   {
     path: 'carrinho-de-compra',
-    loadComponent: () => import('./carrinho/carrinho.page').then( m => m.CarrinhoPage),
+    loadComponent: () => import('./pages/carrinho/carrinho.page').then( m => m.CarrinhoPage),
     canActivate: [AuthGuard]
   },
   {
     path: 'produtos',
-    loadComponent: () => import('./produtos/produtos.page').then( m => m.ProdutosPage),
+    loadComponent: () => import('./pages/produtos/produtos.page').then( m => m.ProdutosPage),
     canActivate: [AuthGuard]
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'cadastro-usuario',
-    loadComponent: () => import('./cadastro-usuario/cadastro-usuario.page').then( m => m.CadastroUsuarioPage),
+    loadComponent: () => import('./pages/cadastro-usuario/cadastro-usuario.page').then( m => m.CadastroUsuarioPage),
   },
   {
     path: 'cadastro-produto',
-    loadComponent: () => import('./cadastro-produto/cadastro-produto.page').then( m => m.CadastroProdutoPage),
+    loadComponent: () => import('./pages/cadastro-produto/cadastro-produto.page').then( m => m.CadastroProdutoPage),
     canActivate: [AdminGuard]
   },
   {
     path: 'cadastro-servico',
-    loadComponent: () => import('./cadastro-servico/cadastro-servico.page').then( m => m.CadastroServicoPage),
+    loadComponent: () => import('./pages/cadastro-servico/cadastro-servico.page').then( m => m.CadastroServicoPage),
     canActivate: [AdminGuard]
   },
   {
     path: 'cadastro-barbeiro',
-    loadComponent: () => import('./cadastro-barbeiro/cadastro-barbeiro.page').then( m => m.CadastroBarbeiroPage),
+    loadComponent: () => import('./pages/cadastro-barbeiro/cadastro-barbeiro.page').then( m => m.CadastroBarbeiroPage),
     canActivate: [AdminGuard]
   },
 

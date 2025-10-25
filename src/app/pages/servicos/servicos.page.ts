@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { caretForwardCircleOutline, closeOutline } from 'ionicons/icons';
-import { HeaderComponent } from '../componentes/header/header.component';
+import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { Servico } from '../interfaces/servico'; 
+import { Servico } from '../../interfaces/servico';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class ServicosPage{
     addIcons({ caretForwardCircleOutline,closeOutline});
      this.servicos$ = of(this.dadosMock);
   }
-  
+
   // Dados estáticos para teste
   private dadosMock: Servico[] = [
     {

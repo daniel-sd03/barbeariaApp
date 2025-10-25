@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
-import { HeaderComponent } from '../componentes/header/header.component';
+import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { Profissional } from '../interfaces/profissional';
+import { Profissional } from '../../interfaces/profissional';
 
 @Component({
   selector: 'app-agendamento',
