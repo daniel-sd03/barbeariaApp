@@ -53,9 +53,12 @@ export class AuthService {
 
   // Logout
   async logout() {
-    await signOut(this.auth);
-    this.setRole(null);
-    this.router.navigate(['/login']);
+    try {
+      await signOut(this.auth);
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Erro ao sair:', error);
+    }
   }
 
   // Atualiza o BehaviorSubject de role
