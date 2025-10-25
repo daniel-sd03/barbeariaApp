@@ -1,0 +1,70 @@
+<app-header>
+  <span titulo>Cadastro do Usuário</span>
+  <ion-button icon-botao [routerLink]="'/login'" botao>
+    <ion-icon name="close-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="credentials" (ngSubmit)="cadastrar()">
+
+    <!-- Nome -->
+    <ion-item>
+      <ion-input label="Nome" type="text" formControlName="nome"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.get('nome')?.invalid && credentials.get('nome')?.touched" class="erro-texto">
+      Nome é obrigatório.
+    </div>
+
+    <!-- Telefone -->
+    <ion-item>
+      <ion-input label="Telefone" type="tel" formControlName="telefone"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.get('telefone')?.invalid && credentials.get('telefone')?.touched" class="erro-texto">
+      Telefone é obrigatório.
+    </div>
+
+    <!-- CPF -->
+    <ion-item>
+      <ion-input label="CPF" type="text" formControlName="cpf"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.get('cpf')?.invalid && credentials.get('cpf')?.touched" class="erro-texto">
+      CPF é obrigatório.
+    </div>
+
+    <!-- E-mail -->
+    <ion-item>
+      <ion-input label="E-mail" type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.get('email')?.invalid && credentials.get('email')?.touched" class="erro-texto">
+      <span *ngIf="credentials.get('email')?.errors?.['required']">E-mail é obrigatório.</span>
+      <span *ngIf="credentials.get('email')?.errors?.['email']">E-mail inválido.</span>
+    </div>
+
+    <!-- Senha -->
+    <ion-item>
+      <ion-input label="Senha" type="password" formControlName="senha"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.get('senha')?.invalid && credentials.get('senha')?.touched" class="erro-texto">
+      <span *ngIf="credentials.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+      <span *ngIf="credentials.get('senha')?.errors?.['minlength']">Senha deve ter no mínimo 6 caracteres.</span>
+    </div>
+
+    <!-- Confirma Senha -->
+    <ion-item>
+      <ion-input label="Confirme a Senha" type="password" formControlName="confirmaSenha"></ion-input>
+    </ion-item>
+    <div *ngIf="credentials.errors?.['notMatching'] && credentials.get('confirmaSenha')?.touched" class="erro-texto">
+      Senhas não conferem.
+    </div>
+
+    <!-- Erro geral -->
+    <div *ngIf="erroCadastro" class="erro-texto">
+      {{ erroCadastro }}
+    </div>
+
+    <ion-button type="submit" expand="block" class="custom-button" [disabled]="credentials.invalid">
+      Cadastrar
+    </ion-button>
+  </form>
+</ion-content>
