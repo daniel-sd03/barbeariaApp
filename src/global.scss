@@ -34,7 +34,7 @@ ion-footer,
 ion-header {
   --background: var(--color-background);
   background: var(--color-background);
-  --ion-item-background: (--color-background);
+  --ion-item-background: var(--color-background);
   --color: var(--color-text);
   color: var(--color-text);
 }
