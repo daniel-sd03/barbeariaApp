@@ -2,7 +2,7 @@
   import { IonList, IonItem, IonHeader, IonToolbar,
     IonTitle, IonMenuToggle, IonAccordionGroup, IonAccordion} from '@ionic/angular/standalone';
   import { RouterLinkWithHref } from '@angular/router';
-  import { AuthService } from 'src/app/services/autenticador/auth.service';
+  import { AuthService } from 'src/app/services/autenticadorService/auth.service';
   import { CommonModule } from '@angular/common';
   import { Observable, take } from 'rxjs';
 

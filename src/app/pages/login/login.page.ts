@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterLinkWithHref } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/autenticador/auth.service';
+import { AuthService } from '../../services/autenticadorService/auth.service';
 
 @Component({
   selector: 'app-login',
