@@ -61,3 +61,14 @@ ion-button.icon-botao  {
    color: var(--color-text);
   --box-shadow: none;
 }
+
+.erro-texto {
+  white-space: pre-line;
+  color: #ff4d4f;
+  font-size: 0.82rem;
+  margin-top: -17px;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  display: block;
+}
+

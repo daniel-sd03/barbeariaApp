@@ -21,15 +21,6 @@ ion-icon {
   color: var(--color-text);
 }
 
-.erro-texto {
-  color: #ff4d4f;
-  font-size: 0.82rem;
-  margin-top: -17px;
-  margin-bottom: 15px;
-  line-height: 1.2;
-  display: block;
-}
-
 @media (max-width: 420px) {
   ion-item {
     box-shadow: 0 1px 3px rgba(255, 255, 255, 0.04);
