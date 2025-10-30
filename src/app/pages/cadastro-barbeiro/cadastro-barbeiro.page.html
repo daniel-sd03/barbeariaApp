@@ -6,23 +6,48 @@
 </app-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-input label="Nome Completo" type="text"></ion-input>
-  </ion-item>
+  <form [formGroup]="form" (ngSubmit)="cadastrar()">
 
-  <ion-item>
-    <ion-input label="Telefone" type="tel"></ion-input>
-  </ion-item>
+    <!-- Nome -->
+    <ion-item>
+      <ion-input label="Nome Completo" type="text" formControlName="nome"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="erro-texto">
+      Nome é obrigatório.
+    </div>
 
-  <ion-item>
-    <ion-input label="CPF" type="text"></ion-input>
-  </ion-item>
+    <!-- Telefone -->
+    <ion-item>
+      <ion-input label="Telefone" type="tel" formControlName="telefone"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('telefone')?.touched && (!form.get('telefone')?.value || !isTelefoneValido())" class="erro-texto">
+      Telefone inválido. Infomre um telefone valido (99) 9 9999-9999.
+    </div>
 
-  <ion-item>
-    <ion-input label="E-mail" type="email"></ion-input>
-  </ion-item>
+    <!-- CPF -->
+    <ion-item>
+      <ion-input label="CPF" type="text" formControlName="cpf"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('cpf')?.touched && (!form.get('cpf')?.value || !isCpfValido())" class="erro-texto">
+      CPF inválido. Deve conter 11 dígitos.
+    </div>
 
-  <ion-button [routerLink]="'/'" expand="block" class="custom-button">
-    Cadastrar
-  </ion-button>
+    <!-- E-mail -->
+    <ion-item>
+      <ion-input label="E-mail" type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="erro-texto">
+      <span *ngIf="form.get('email')?.errors?.['required']">E-mail é obrigatório.</span>
+      <span *ngIf="form.get('email')?.errors?.['email']">E-mail inválido.</span>
+    </div>
+
+    <!-- Erro geral -->
+    <div *ngIf="erroCadastro" class="erro-texto">
+      {{ erroCadastro }}
+    </div>
+
+    <ion-button type="submit" expand="block" class="custom-button" [disabled]="form.invalid">
+      Cadastrar
+    </ion-button>
+  </form>
 </ion-content>

@@ -6,7 +6,7 @@ import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { UsuarioService } from 'src/app/services/usuarioService/usuario.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
