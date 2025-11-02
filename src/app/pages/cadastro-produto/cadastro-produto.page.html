@@ -6,31 +6,46 @@
 </app-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-input label="Nome do Produto" type="text"></ion-input>
-  </ion-item>
+  <form [formGroup]="form" (ngSubmit)="cadastrarProduto()">
+    <!-- Nome -->
+    <ion-item>
+      <ion-input label="Nome do Produto" type="text" formControlName="nome"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="erro-texto">
+      <span *ngIf="form.get('nome')?.errors?.['required']">Nome do produto é obrigatório.</span>
+      <span *ngIf="form.get('nome')?.errors?.['minlength']">Nome deve ter pelo menos 3 caracteres.</span>
+    </div>
 
-  <ion-item>
-    <ion-input label="Marca" type="text"></ion-input>
-  </ion-item>
+    <!-- Preço -->
+    <ion-item>
+      <ion-input label="Preço" type="number" formControlName="preco"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('preco')?.touched && form.get('preco')?.invalid" class="erro-texto">
+      <span *ngIf="form.get('preco')?.errors?.['required']">Preço é obrigatório.</span>
+      <span *ngIf="form.get('preco')?.errors?.['min']">Preço deve ser maior que zero.</span>
+    </div>
 
-  <ion-item>
-    <ion-input label="Descrição" type="text"></ion-input>
-  </ion-item>
+    <!-- Quantidade -->
+    <ion-item>
+      <ion-input label="Quantidade" type="number" formControlName="quantidade"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('quantidade')?.touched && form.get('quantidade')?.invalid" class="erro-texto">
+       <span *ngIf="form.get('quantidade')?.errors?.['required']">Quantidade é obrigatório.</span>
+      <span *ngIf="form.get('quantidade')?.errors?.['min']">Quantidade não pode ser negativa.</span>
+    </div>
 
-  <ion-item>
-    <ion-input label="Preço" type="number"></ion-input>
-  </ion-item>
+    <!-- Imagem (opcional) -->
+    <ion-item>
+      <ion-input label="Imagem (URL)" type="text" formControlName="imagem"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-input label="Código de Barras / SKU" type="text"></ion-input>
-  </ion-item>
+    <!-- Erro geral -->
+    <div *ngIf="erroCadastro" class="erro-texto">
+      {{ erroCadastro }}
+    </div>
 
-  <ion-item>
-    <ion-input label="Fornecedor" type="text"></ion-input>
-  </ion-item>
-
-  <ion-button [routerLink]="'/'" expand="block" class="custom-button">
-    Cadastrar
-  </ion-button>
+    <ion-button type="submit" expand="block" class="custom-button">
+      Cadastrar
+    </ion-button>
+  </form>
 </ion-content>

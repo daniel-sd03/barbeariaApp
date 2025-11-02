@@ -1,23 +1,69 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Produto } from '../../interfaces/produto';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, docData, updateDoc } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutoService {
-  private dadosMock: Produto[] = [
-    { id: 1, nome: 'Shampoo', preco: 49.99, imagem: 'assets/fotos/produtos/produto01.jpeg', quantidade: 1 },
-    { id: 2, nome: 'Gel', preco: 10.99, imagem: 'assets/fotos/produtos/produto02.jpeg',quantidade: 2 },
-    { id: 3, nome: 'Pós-barba', preco: 29.99, imagem: 'assets/fotos/produtos/produto03.jpeg',quantidade: 3 }
-  ];
+  private colecao = 'produtos';
 
-  constructor() {}
+  constructor(private firestore: Firestore) { }
 
   getProdutos(): Observable<Produto[]> {
-    // aqui você trocaria por um this.http.get quando integrar API real
-    return of(this.dadosMock);
+    const produtosRef = collection(this.firestore, this.colecao);
+    return (collectionData(produtosRef, { idField: 'id' }) as Observable<Produto[]>)
+      .pipe(
+        catchError((error) => {
+          console.error("[produtoService] erro ao tentar listar produtos: " + error);
+          return throwError(() => error);
+        })
+      );
   }
 
-  getProdutoById(id: number | string): Observable<Produto | undefined> {
-    return of(this.dadosMock.find(p => p.id === id));
+  getProdutoById(id: string): Observable<Produto> {
+    const produtoDocRef = doc(this.firestore, `${this.colecao}/${id}`);
+    return (docData(produtoDocRef, { idField: 'id' }) as Observable<Produto>)
+      .pipe(
+        catchError((error) => {
+          console.error("[produtoService] erro ao tentar buscar produto por id: " + error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  cadastrarProduto(produto: Omit<Produto, 'id'>): Promise<any> {
+    try {
+      const produtosRef = collection(this.firestore, this.colecao);
+      return addDoc(produtosRef, produto);
+    } catch (error) {
+      console.error("[produtoService] erro ao tentar cadastrar produto: " + error);
+      throw error;
+    }
+  }
+
+  atualizarProduto(produto: Produto): Promise<void> {
+    try {
+      const produtoDocRef = doc(this.firestore, `${this.colecao}/${produto.id}`);
+      return updateDoc(produtoDocRef, {
+        nome: produto.nome,
+        preco: produto.preco,
+        quantidade: produto.quantidade,
+        imagem: produto.imagem
+      });
+    } catch (error) {
+      console.error("[produtoService] erro ao tentar atualizar produto: " + error);
+      throw error;
+    }
+  }
+
+  excluirProduto(id: string): Promise<void> {
+    try {
+      const produtoDocRef = doc(this.firestore, `${this.colecao}/${id}`);
+      return deleteDoc(produtoDocRef);
+    } catch (error) {
+      console.error("[produtoService] erro ao tentar excluir produto: " + error);
+      throw error;
+    }
   }
 }
