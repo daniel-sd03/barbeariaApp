@@ -1,7 +1,7 @@
 export interface Servico {
-  id: number | string;
+  id: string;
   titulo: string;
-  duracao: string;     
-  imagem: string;     
-  preco: number;      
+  preco: number;
+  duracao: string;
+  imagem: string;
 }
