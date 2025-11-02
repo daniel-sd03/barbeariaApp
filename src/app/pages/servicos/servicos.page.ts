@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,8 +7,9 @@ import { addIcons } from 'ionicons';
 import { caretForwardCircleOutline, closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Servico } from '../../interfaces/servico';
+import { ServicoService } from 'src/app/services/servicoService/servico.service';
 
 
 @Component({
@@ -18,50 +20,17 @@ import { Servico } from '../../interfaces/servico';
   imports: [IonicModule, CommonModule, FormsModule,HeaderComponent, RouterLinkWithHref]
 })
 export class ServicosPage{
-   // Expor como Observable para manter compatibilidade com o template (| async)
+  // Observable para usar com | async no template
   servicos$: Observable<Servico[]>;
 
-  constructor(){
+  constructor(private servicoService: ServicoService){
     addIcons({ caretForwardCircleOutline,closeOutline});
-     this.servicos$ = of(this.dadosMock);
+    // Busca dinâmica do Firestore via Service
+    this.servicos$ = this.servicoService.getServicos();
   }
-
-  // Dados estáticos para teste
-  private dadosMock: Servico[] = [
-    {
-      id: 1,
-      titulo: 'Cortes',
-      duracao: '30 minutos',
-      imagem: 'assets/fotos/servicos/servico01.jpg',
-      preco: 30
-    },
-    {
-      id: 2,
-      titulo: 'Corte e barba',
-      duracao: '45 minutos',
-      imagem: 'assets/fotos/servicos/servico02.jpg',
-      preco: 50
-    },
-    {
-      id: 3,
-      titulo: 'Barba',
-      duracao: '20 minutos',
-      imagem: 'assets/fotos/servicos/servico03.jpeg',
-      preco: 25
-    },
-    {
-      id: 4,
-      titulo: 'Nevou',
-      duracao: '30 minutos',
-      imagem: 'assets/fotos/servicos/servico04.jpeg',
-      preco: 35
-    }
-  ];
 
   // trackBy para performance do *ngFor
   trackById(index: number, item: Servico) {
     return item.id;
   }
 }
-
-
