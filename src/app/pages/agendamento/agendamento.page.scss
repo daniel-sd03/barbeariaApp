@@ -92,10 +92,34 @@
   flex-wrap: wrap;
 }
 
+.horarios ion-button {
+  margin: 2px;
+  border-radius: 30px;
+  font-size: 12px;
+  min-width: 60px;
+}
+
 /* texto quando não há horários */
 .no-times {
   color: #999;
   font-size: 14px;
+}
+
+/* serviço selecionado */
+.servico-selecionado {
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+.servico-selecionado h3 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.servico-selecionado p {
+  margin: 4px 0;
 }
 
 /* caixa de confirmação fixa */
@@ -103,9 +127,19 @@
   position: sticky;
   bottom: 12px;
   margin-top: 16px;
-  padding: 12px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0);
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-box p {
+  margin: 4px 0;
+}
+
+.confirm-box strong {
+  color: var(--ion-color-primary);
 }
 
 /* ajustes responsivos */

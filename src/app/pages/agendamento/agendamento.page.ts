@@ -5,9 +5,17 @@ import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
-import { RouterLinkWithHref } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { Profissional } from '../../interfaces/profissional';
+import { RouterLinkWithHref, ActivatedRoute, Router } from '@angular/router';
+import { Observable, of, combineLatest } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Barbeiro } from '../../interfaces/barbeiro';
+import { Servico } from '../../interfaces/servico';
+import { Agendamento, DisponibilidadeBarbeiro } from '../../interfaces/agendamento';
+import { BarbeiroService } from '../../services/barbeiroService/barbeiro.service';
+import { AgendamentoService } from '../../services/agendamentoService/agendamento.service';
+import { ServicoService } from '../../services/servicoService/servico.service';
+import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
+import { Produto } from '../../interfaces/produto';
 
 @Component({
   selector: 'app-agendamento',
@@ -18,19 +26,11 @@ import { Profissional } from '../../interfaces/profissional';
 })
 
 export class AgendamentoPage implements OnInit {
-  constructor() {
-    addIcons({ closeOutline })
-    this.profissionais$ = of(this.dadosMock);
-    this.buildSemana();
-  }
-
-  ngOnInit() {
-    this.mesAtual = this.getMesAtual();
-  }
-
-
   mesAtual: string = '';
+  servicoSelecionado?: Servico;
 
+  // profissionais vindos do Firestore
+  profissionais$: Observable<Barbeiro[]> = of([]);
 
   // data atualmente selecionada (Date)
   selectedDate = new Date();
@@ -38,35 +38,46 @@ export class AgendamentoPage implements OnInit {
   // lista de dias que iremos mostrar (por padrão a semana a partir da selectedDate)
   semana: Date[] = [];
 
-  // profissionais (mock) — em app real, vem do backend via service
-  profissionais$: Observable<Profissional[]>;
+  // disponibilidades por barbeiro para a data selecionada
+  disponibilidades: { [barbeiroId: string]: DisponibilidadeBarbeiro } = {};
 
   // qual profissional/horario foi selecionado (para confirmar)
-  selectedProfissional?: Profissional;
+  selectedProfissional?: Barbeiro;
   selectedHorario?: string;
   selectedDataISO?: string;
 
-  // mock data
-  private dadosMock: Profissional[] = [
-    {
-      id: 1,
-      nome: 'Farah',
-      foto: 'assets/fotos/servicos/servico03.jpeg',
-      disponibilidade: [
-        { dataISO: this.toISO(new Date()), horarios: ['08:20', '09:40', '11:00'] },
-        { dataISO: this.toISO(this.addDays(new Date(), 1)), horarios: ['09:00', '10:30'] }
-      ]
-    },
-    {
-      id: 2,
-      nome: 'João',
-      foto: 'assets/fotos/servicos/servico02.jpg',
-      disponibilidade: [
-        { dataISO: this.toISO(new Date()), horarios: ['08:00', '12:00'] },
-        { dataISO: this.toISO(this.addDays(new Date(), 2)), horarios: ['14:00', '15:30'] }
-      ]
-    }
-  ];
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private barbeiroService: BarbeiroService,
+    private agendamentoService: AgendamentoService,
+    private servicoService: ServicoService,
+    private carrinhoService: CarrinhoService
+  ) {
+    addIcons({ closeOutline })
+    this.buildSemana();
+  }
+
+  ngOnInit() {
+    this.mesAtual = this.getMesAtual();
+
+    // Receber o serviço selecionado da navegação
+    this.route.queryParams.subscribe(params => {
+      if (params['servicoId']) {
+        this.servicoSelecionado = { id: params['servicoId'] } as Servico;
+        // Buscar detalhes completos do serviço
+        this.servicoService.getServicoById(params['servicoId']).subscribe(servico => {
+          this.servicoSelecionado = servico;
+        });
+      }
+    });
+
+    // Carregar barbeiros
+    this.profissionais$ = this.barbeiroService.getBarbeiros();
+
+    // Carregar disponibilidades para a data atual
+    this.carregarDisponibilidades();
+  }
 
   // util: formata Date para YYYY-MM-DD
   toISO(d: Date) {
@@ -119,21 +130,61 @@ export class AgendamentoPage implements OnInit {
     this.mesAtual = this.getMesAtual();
     this.selectedHorario = undefined;
     this.selectedProfissional = undefined;
+
+    // Carregar disponibilidades para a nova data
+    this.carregarDisponibilidades();
   }
 
-  // encontra horários disponíveis do profissional para a data ISO
-  horariosDisponiveis(prof: Profissional, dataISO: string): string[] {
-    const disp = prof.disponibilidade.find(d => d.dataISO === dataISO);
-    return disp ? disp.horarios : [];
+  // Carregar disponibilidades de todos os barbeiros para a data selecionada
+  carregarDisponibilidades() {
+    const dataISO = this.toISO(this.selectedDate);
+
+    this.profissionais$.subscribe(barbeiros => {
+      barbeiros.forEach(barbeiro => {
+        this.agendamentoService.getDisponibilidadeBarbeiro(barbeiro.id, dataISO)
+          .subscribe(disponibilidade => {
+            this.disponibilidades[barbeiro.id] = disponibilidade;
+          });
+      });
+    });
+  }
+
+  // Obter horários disponíveis para um barbeiro específico
+  getHorariosDisponiveis(barbeiroId: string): string[] {
+    const disponibilidade = this.disponibilidades[barbeiroId];
+    if (!disponibilidade) return [];
+
+    return disponibilidade.horarios
+      .filter(h => h.disponivel)
+      .map(h => h.horario);
   }
 
   // selecionar horário
-  selecionarHorario(prof: Profissional, dataISO: string, horario: string) {
+  selecionarHorario(prof: Barbeiro, dataISO: string, horario: string) {
     this.selectedProfissional = prof;
     this.selectedHorario = horario;
     this.selectedDataISO = dataISO;
-    // aqui poderia abrir modal de confirmação / ir pra próxima tela
     console.log('selecionado', prof.nome, dataISO, horario);
+  }
+
+  // Adicionar serviço agendado ao carrinho e redirecionar
+  confirmarAgendamento() {
+    if (!this.selectedProfissional || !this.selectedHorario || !this.selectedDataISO || !this.servicoSelecionado) {
+      console.error('Dados incompletos para adicionar agendamento ao carrinho');
+      return;
+    }
+
+    const agendamento: Omit<Agendamento, 'id'> = {
+      barbeiroId: this.selectedProfissional.id,
+      servicoId: this.servicoSelecionado.id,
+      data: this.selectedDataISO,
+      horario: this.selectedHorario,
+      duracao: this.servicoSelecionado.duracao,
+      status: 'agendado'
+    };
+
+    this.carrinhoService.setAgendamento(agendamento as Agendamento);
+    this.router.navigate(['/produtos']);
   }
 
   // converte os possíveis valores do ion-datetime para Date ou null
@@ -147,5 +198,5 @@ export class AgendamentoPage implements OnInit {
   }
 
   // trackBy para ngFor de profissionais
-  trackByProf(index: number, p: Profissional) { return p.id; }
+  trackByProf(index: number, p: Barbeiro) { return p.id; }
 }

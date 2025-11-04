@@ -19,27 +19,37 @@
       </ion-button>
     </div>
 
-    <h3>Escolha o Profissional</h3>
+    <!-- Mostrar serviço selecionado -->
+    <div *ngIf="servicoSelecionado" class="servico-selecionado">
+      <h3>Serviço: {{ servicoSelecionado.titulo }}</h3>
+      <p>Preço: {{ servicoSelecionado.preco | currency:'BRL':'symbol':'1.2-2' }}</p>
+      <p>Duração: {{ servicoSelecionado.duracao }} min</p>
+    </div>
+
+    <h3>Escolha o Profissional e Horário</h3>
 
     <ion-list>
       <ion-item class="profissional-item" *ngFor="let prof of (profissionais$ | async); trackBy: trackByProf">
         <ion-thumbnail slot="start" class="card-image-box">
-          <img [src]="prof.foto" alt="{{prof.nome}}">
+          <img [src]="prof.foto || 'assets/default-barber.jpg'" alt="{{prof.nome}}">
         </ion-thumbnail>
 
         <ion-label class="profissional-info">
           <h4>{{ prof.nome }}</h4>
 
+          <!-- Horários disponíveis -->
           <div class="horarios">
-            <ng-container *ngIf="(horariosDisponiveis(prof, getISO(selectedDate)) || []).length; else semHorarios">
-              <ion-button *ngFor="let h of horariosDisponiveis(prof, getISO(selectedDate))" size="small" shape="round"
-                fill="outline" (click)="selecionarHorario(prof, getISO(selectedDate), h)">
-                {{ h }}
-              </ion-button>
-            </ng-container>
-            <ng-template #semHorarios>
-              <span class="no-times">Sem horários</span>
-            </ng-template>
+            <ion-button
+              *ngFor="let horario of getHorariosDisponiveis(prof.id)"
+              size="small"
+              [color]="selectedProfissional?.id === prof.id && selectedHorario === horario ? 'primary' : null"
+              (click)="selecionarHorario(prof, getISO(selectedDate), horario)">
+              {{ horario }}
+            </ion-button>
+
+            <p *ngIf="getHorariosDisponiveis(prof.id).length === 0" class="no-times">
+              Nenhum horário disponível para esta data
+            </p>
           </div>
         </ion-label>
 
@@ -47,11 +57,13 @@
     </ion-list>
 
     <!-- Cartão simples de confirmação na parte inferior (aparece quando selecionado) -->
-    <div *ngIf="selectedProfissional && selectedHorario" class="confirm-box">
-      <p>Confirmar:</p>
-      <strong>{{ selectedProfissional.nome }}</strong>
-      <p>{{ selectedDataISO }} — {{ selectedHorario }}</p>
-      <ion-button expand="block" [routerLink]="'/produtos'">
+    <div *ngIf="selectedProfissional && selectedHorario && servicoSelecionado" class="confirm-box">
+      <p>Confirmar Agendamento:</p>
+      <strong>Serviço: {{ servicoSelecionado.titulo }}</strong>
+      <p>Barbeiro: {{ selectedProfissional.nome }}</p>
+      <p>Data: {{ selectedDataISO }} — Horário: {{ selectedHorario }}</p>
+      <p>Preço: {{ servicoSelecionado.preco | currency:'BRL':'symbol':'1.2-2' }}</p>
+      <ion-button expand="block" (click)="confirmarAgendamento()">
         Confirmar agendamento
       </ion-button>
     </div>
