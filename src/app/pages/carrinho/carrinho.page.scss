@@ -8,32 +8,281 @@
   padding-top: 16px;
 }
 
-.total-container {
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
 
-.custom-button {
-  --background: #009688;
-  --color: #fff;
+/* Estilos do card de agendamento */
+.agendamento-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background: #1f1f1f; /* tom escuro como na imagem */
+  color: #e6e6e6;
   border-radius: 12px;
-  font-weight: 500;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  gap: 12px;
+  overflow: hidden;
 }
 
-ion-item{
-  margin-bottom: 80px;
+.card-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 8px;
+  min-width: 0;
 }
 
-ion-item,
-ion-list {
-  --background: rgba(19, 22, 31, 1);
-  background: rgba(19, 22, 31, 1) !important;
-  --ion-item-background: rgba(19, 22, 31, 1);
+.servico-titulo {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barbeiro-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.barbeiro-avatar {
+  --border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.06);
+}
+
+.barbeiro-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.barbeiro-nome {
+  font-size: 0.95rem;
+  color: #cfcfcf;
+}
+
+.preco {
+  color: #1db954; /* verde do valor */
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.horario-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  color: #d0d0d0;
+  font-size: 0.92rem;
+}
+
+.relogio-icon {
+  font-size: 1rem;
+  color: #d0d0d0;
+}
+
+/* caixa de data à direita */
+.card-right {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  max-width: 64px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
   color: #fff;
 }
 
-ion-icon{
-  color: #ffffff;
+/* Ícone X */
+.close-icon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 18px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-icon:hover {
+  color: #fff;
+}
+
+.dia {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mes {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #d0d0d0;
+  margin-top: 4px;
+}
+
+/* Estilos do card de Produtos */
+.produto-card {
+  align-items: center;
+  gap: 12px;
+  color: #eaeaea;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 8px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  --background: none;
+
+  --background: linear-gradient(
+  180deg,
+  rgba(19, 22, 31, 1) 0%,
+  rgb(23, 22, 22) 50%,
+  rgba(232, 13, 13, 0.05) 100%
+);
+border-radius: 20px;
+
+overflow: hidden;
+}
+
+.prod-left {
+  flex: 0 0 72px;
+}
+
+.img-box {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prod-middle {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin-left: 10px;
+}
+
+.prod-nome {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prod-uni {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #cfcfcf;
+}
+
+.price {
+  color: #1db954;
+  font-weight: 700;
+}
+
+.prod-desc {
+  font-size: 0.82rem;
+  color: #bdbdbd;
+}
+
+.prod-controls {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.prod-controls ion-input.qty-input {
+  width: 70px;
+}
+
+.prod-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 12px;
+}
+
+.controls-horizontal ion-icon,
+.controls-horizontal ion-label {
+ font-size: 15px;
+}
+
+.qty-display {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+}
+
+.qty-input-horizontal {
+  width: 50px;
+  text-align: center;
+  --padding-start: 0;
+  --padding-end: 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.subtotal-horizontal {
+  margin-top: 6px;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.controls-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-input-vertical {
+  width: 72px;
+}
+
+.subtotal-vertical {
+  font-weight: 700;
+  color: #fff;
+}
+
+.subtotal {
+  font-size: 0.92rem;
+  color: #fff;
+  margin-left: 6px;
+}
+.custom-button{
+  border-radius: 20px;
 }

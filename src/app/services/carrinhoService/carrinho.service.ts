@@ -1,54 +1,91 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Produto } from 'src/app/interfaces/produto';
+import { Agendamento } from 'src/app/interfaces/agendamento';
+import { Carrinho } from 'src/app/interfaces/carrinho';
 
 @Injectable({ providedIn: 'root' })
 export class CarrinhoService {
-  private items$ = new BehaviorSubject<Produto[]>([]);
-  getItems(): Observable<Produto[]> { return this.items$.asObservable(); }
+  private carrinho$ = new BehaviorSubject<Carrinho>({ produtos: [] });
+
+  // Observables
+  getCarrinho(): Observable<Carrinho> { return this.carrinho$.asObservable(); }
+  getItems(): Observable<Produto[]> { return this.carrinho$.asObservable().pipe(map(c => c.produtos)); }
 
   // adiciona (incrementa se já existir)
-  addToCart(prod: Produto) {
-    const current = this.items$.value.slice();
+  addProduto(prod: Produto) {
+    const snapshot = this.carrinho$.value;
+    const current = snapshot.produtos.slice();
     const idx = current.findIndex(p => p.id === prod.id);
     if (idx > -1) {
       current[idx] = { ...current[idx], quantidade: (current[idx].quantidade || 1) + 1 };
     } else {
       current.push({ ...prod, quantidade: 1 });
     }
-    this.items$.next(current);
+    this.carrinho$.next({ ...snapshot, produtos: current });
   }
 
+  // alias para compatibilidade
+  addToCart(prod: Produto) { this.addProduto(prod); }
+
   // atualiza quantidade para um produto (remove se quantidade < 1)
-  updateQuantity(id: number, quantidade: number) {
+  updateProdutoQuantidade(id: String, quantidade: number) {
     if (quantidade <= 0) {
-      this.removeFromCart(id);
+      this.removeProduto(id);
       return;
     }
-    const current = this.items$.value.slice();
+    const snapshot = this.carrinho$.value;
+    const current = snapshot.produtos.slice();
     const idx = current.findIndex(p => p.id === id);
     if (idx > -1) {
       current[idx] = { ...current[idx], quantidade: Math.floor(quantidade) };
-      this.items$.next(current);
+      this.carrinho$.next({ ...snapshot, produtos: current });
     }
   }
 
+  // alias para compatibilidade
+  updateQuantity(id: String, quantidade: number) { this.updateProdutoQuantidade(id, quantidade); }
+
   // remove item por id
-  removeFromCart(id: number) {
-    const current = this.items$.value.filter(p => p.id !== id);
-    this.items$.next(current);
+  removeProduto(id: String) {
+    const snapshot = this.carrinho$.value;
+    const current = snapshot.produtos.filter(p => p.id !== id);
+    this.carrinho$.next({ ...snapshot, produtos: current });
   }
 
+  // alias para compatibilidade
+  removeFromCart(id: String) { this.removeProduto(id); }
+
   // limpar carrinho
-  clear() { this.items$.next([]); }
+  clear() { this.carrinho$.next({ produtos: [] }); }
+
+  // limpar apenas produtos
+  clearProdutos() {
+    const snapshot = this.carrinho$.value;
+    this.carrinho$.next({ ...snapshot, produtos: [] });
+  }
 
   // opcional: substituir toda a lista (útil para restauração)
   setItems(items: Produto[]) {
-    this.items$.next(items.slice());
+    const snapshot = this.carrinho$.value;
+    this.carrinho$.next({ ...snapshot, produtos: items.slice() });
   }
 
   // opcional: snapshot (uso interno)
-  getSnapshot(): Produto[] {
-    return this.items$.value.slice();
+  getSnapshot(): Carrinho {
+    return { ...this.carrinho$.value, produtos: this.carrinho$.value.produtos.slice() };
+  }
+
+  // agendamento
+  setAgendamento(agendamento: Agendamento) {
+    const snapshot = this.carrinho$.value;
+    this.carrinho$.next({ ...snapshot, agendamento });
+  }
+
+  removeAgendamento() {
+    const snapshot = this.carrinho$.value;
+    const { agendamento, ...rest } = snapshot;
+    this.carrinho$.next({ ...rest, agendamento: undefined });
   }
 }
