@@ -27,14 +27,16 @@
     </div>
 
     <div class="card-right">
-      <ion-icon name="close-outline" class="close-icon" size="large" (click)="removerAgendamento()"></ion-icon>
-      <div class="dia">{{ formatDia(agendamento.data) }}</div>
-      <div class="mes">{{ formatMesAbrev(agendamento.data) }}</div>
+      <ion-icon name="close-outline" class="close-icon" (click)="removerAgendamento()" ></ion-icon>
+      <div class="date-box">
+        <div class="dia">04</div>
+        <div class="mes">NOV</div>
+      </div>
     </div>
   </ion-card>
 
   <!-- Lista de itens -->
-  <ion-list class="produto-list" >
+  <ion-list class="produto-list">
     <ion-item *ngFor="let p of produtos; trackBy: trackById" class="produto-card">
       <!-- Left: imagem -->
       <div class="prod-left">
@@ -46,18 +48,22 @@
       <!-- Middle: infos -->
       <div class="prod-middle">
         <h3 class="prod-nome">{{ p.nome }}</h3>
-        <p class="prod-uni">Preço unitário: <span class="price">{{ p.preco | currency:'BRL':'symbol':'1.2-2' }}</span>
+        <p class="prod-uni">Preço unitário:
+          <br>
+          <span class="price">{{ p.preco | currency:'BRL':'symbol':'1.2-2' }}</span>
         </p>
       </div>
 
       <!-- Right: controles (desktop) -->
       <div class="prod-right">
         <div class="controls-horizontal">
-          <ion-icon name="remove-circle-outline" (click)="diminuirQuantidade(p.id, p.quantidade)" aria-label="Diminuir quantidade"></ion-icon>
+          <ion-icon name="remove-circle-outline" (click)="diminuirQuantidade(p.id, p.quantidade)"
+            aria-label="Diminuir quantidade"></ion-icon>
 
           <ion-label class="qty-display">{{ p.quantidade }}</ion-label>
 
-          <ion-icon name="add-circle-outline" (click)="aumentarQuantidade(p.id)" aria-label="Aumentar quantidade"></ion-icon>
+          <ion-icon name="add-circle-outline" (click)="aumentarQuantidade(p.id)"
+            aria-label="Aumentar quantidade"></ion-icon>
         </div>
 
         <div class="subtotal-horizontal">
