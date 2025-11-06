@@ -93,7 +93,7 @@ export class CarrinhoPage implements OnInit, OnDestroy {
   }
 
   recalcularTotal() {
-    this.total = this.produtos.reduce((acc, p) => acc + (p.preco || 0) * (p.quantidade || 0), 0);
+    this.total = (this.servico?.preco || 0) + this.produtos.reduce((acc, p) => acc + (p.preco || 0) * (p.quantidade || 0), 0);
   }
 
   finalizarCompra() {
