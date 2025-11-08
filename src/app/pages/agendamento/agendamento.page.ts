@@ -16,6 +16,7 @@ import { AgendamentoService } from '../../services/agendamentoService/agendament
 import { ServicoService } from '../../services/servicoService/servico.service';
 import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
 import { Produto } from '../../interfaces/produto';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-agendamento',
@@ -28,6 +29,7 @@ import { Produto } from '../../interfaces/produto';
 export class AgendamentoPage implements OnInit {
   mesAtual: string = '';
   servicoSelecionado?: Servico;
+  clienteId?: string;
 
   // profissionais vindos do Firestore
   profissionais$: Observable<Barbeiro[]> = of([]);
@@ -52,7 +54,8 @@ export class AgendamentoPage implements OnInit {
     private barbeiroService: BarbeiroService,
     private agendamentoService: AgendamentoService,
     private servicoService: ServicoService,
-    private carrinhoService: CarrinhoService
+    private carrinhoService: CarrinhoService,
+    private auth: Auth
   ) {
     addIcons({ closeOutline })
     this.buildSemana();
@@ -60,6 +63,12 @@ export class AgendamentoPage implements OnInit {
 
   ngOnInit() {
     this.mesAtual = this.getMesAtual();
+
+    // Obter ID do cliente autenticado
+    this.clienteId = this.auth.currentUser?.uid || undefined;
+    onAuthStateChanged(this.auth, (user) => {
+      this.clienteId = user?.uid || undefined;
+    });
 
     // Receber o serviço selecionado da navegação
     this.route.queryParams.subscribe(params => {
@@ -169,6 +178,11 @@ export class AgendamentoPage implements OnInit {
 
   // Adicionar serviço agendado ao carrinho e redirecionar
   confirmarAgendamento() {
+    if (!this.clienteId) {
+      console.error('Usuário não autenticado.');
+      return;
+    }
+
     if (!this.selectedProfissional || !this.selectedHorario || !this.selectedDataISO || !this.servicoSelecionado) {
       console.error('Dados incompletos para adicionar agendamento ao carrinho');
       return;
@@ -177,6 +191,7 @@ export class AgendamentoPage implements OnInit {
     const agendamento: Omit<Agendamento, 'id'> = {
       barbeiroId: this.selectedProfissional.id,
       servicoId: this.servicoSelecionado.id,
+      clienteId: this.clienteId,
       data: this.selectedDataISO,
       horario: this.selectedHorario,
       duracao: this.servicoSelecionado.duracao,

@@ -2,7 +2,7 @@ export interface Agendamento {
   id?: string;
   barbeiroId: string;
   servicoId: string;
-  clienteId?: string; // Para futuras implementações de autenticação
+  clienteId: string; // Para futuras implementações de autenticação
   data: string; // YYYY-MM-DD
   horario: string; // HH:MM
   duracao: number; // HH:MM
