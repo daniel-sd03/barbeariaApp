@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline, timeOutline, addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -14,13 +14,18 @@ import { Barbeiro } from 'src/app/interfaces/barbeiro';
 import { Servico } from 'src/app/interfaces/servico';
 import { BarbeiroService } from 'src/app/services/barbeiroService/barbeiro.service';
 import { ServicoService } from 'src/app/services/servicoService/servico.service';
+import { AgendamentoService } from 'src/app/services/agendamentoService/agendamento.service';
+import { OrdemServicoService } from 'src/app/services/ordemServicoService/ordem-servico.service';
+import { OrdemServico } from 'src/app/interfaces/ordem-servico';
+import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-carrinho-de-compra',
   templateUrl: './carrinho.page.html',
   styleUrls: ['./carrinho.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule,HeaderComponent, RouterLinkWithHref]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 
 export class CarrinhoPage implements OnInit, OnDestroy {
@@ -36,9 +41,14 @@ export class CarrinhoPage implements OnInit, OnDestroy {
   constructor(
     private carrinhoService: CarrinhoService,
     private barbeiroService: BarbeiroService,
-    private servicoService: ServicoService
+    private servicoService: ServicoService,
+    private agendamentoService: AgendamentoService,
+    private ordemServicoService: OrdemServicoService,
+    private alertController: AlertController,
+    private router: Router,
+    private auth: Auth
   ) {
-    addIcons({closeOutline, timeOutline, addCircleOutline, removeCircleOutline})
+    addIcons({ closeOutline, timeOutline, addCircleOutline, removeCircleOutline })
   }
 
   ngOnInit() {
@@ -96,10 +106,74 @@ export class CarrinhoPage implements OnInit, OnDestroy {
     this.total = (this.servico?.preco || 0) + this.produtos.reduce((acc, p) => acc + (p.preco || 0) * (p.quantidade || 0), 0);
   }
 
-  finalizarCompra() {
-    // placeholder — integrar com checkout
-    alert(`Total: ${this.total.toFixed(2)} — implementar checkout`);
-    // Ex: this.carrinhoService.clear();
+  async finalizarCompra() {
+    try {
+      // Verifica se tem agendamento ou produtos
+      const temAgendamento = !!this.agendamento;
+      const temProdutos = (this.produtos || []).some(p => (p.quantidade || 0) > 0);
+
+      if (!temAgendamento && !temProdutos) {
+        const alertVazio = await this.alertController.create({
+          header: 'Atenção',
+          message: 'Adicione um agendamento ou ao menos um produto para finalizar.',
+          buttons: ['OK']
+        });
+        await alertVazio.present();
+        return;
+      }
+
+      //  1) Salvar agendamento se existir
+      let agendamentoId: string | undefined;
+      if (temAgendamento && this.agendamento) {
+        agendamentoId = await this.agendamentoService.criarAgendamento(this.agendamento);
+      }
+
+
+      //  2) Montar agendamento (com id do Firestore)
+      let agendamento: Agendamento | undefined;
+      if (temAgendamento && this.agendamento) {
+        agendamento = {
+          id: agendamentoId!,
+          ...this.agendamento
+        } as Agendamento;
+      }
+
+      //  3) Criar ordem de serviço
+      const clienteId = this.auth.currentUser?.uid;
+      if (!clienteId) throw new Error('Usuário não autenticado');
+
+      const ordem: Omit<OrdemServico, 'id'> = {
+        clienteId,
+        ...(temAgendamento ? { agendamento } : {}), // adiciona só se existir
+       ...(temProdutos ? { produtos: this.produtos } : {}),          // adiciona só se existir
+        total: this.total,
+        dtOS: new Date()
+      };
+
+      // 🔹 4) Salvar ordem
+      await this.ordemServicoService.salvarOrdemServico(ordem);
+
+      // 🔹 5) Limpar carrinho
+      this.carrinhoService.removeAgendamento();
+      this.carrinhoService.setItems([]);
+
+      // 🔹 6) Sucesso
+      const alert = await this.alertController.create({
+        header: 'Sucesso',
+        message: 'Compra finalizada com sucesso!',
+        buttons: [{ text: 'OK', handler: () => this.router.navigate(['/home']) }]
+      });
+      await alert.present();
+
+    } catch (err) {
+      const alertErr = await this.alertController.create({
+        header: 'Erro',
+        message: 'Não foi possível finalizar a compra. Tente novamente.',
+        buttons: ['OK']
+      });
+      await alertErr.present();
+      console.error('[finalizarCompra] erro:', err);
+    }
   }
 
   aumentarQuantidade(id: String) {
@@ -121,19 +195,18 @@ export class CarrinhoPage implements OnInit, OnDestroy {
     return (valor ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
-  formatDia(iso?: string) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const dd = d.getDate();
-    return String(dd).padStart(2, '0');
-  }
+ formatDia(iso?: string) {
+  if (!iso) return '';
+  const [year, month, day] = iso.split('-').map(Number);
+  return String(day).padStart(2, '0'); // não cria Date, só pega o dia
+}
 
-  formatMesAbrev(iso?: string) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const meses = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
-    return meses[d.getMonth()];
-  }
+formatMesAbrev(iso?: string) {
+  if (!iso) return '';
+  const meses = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+  const [year, month] = iso.split('-').map(Number);
+  return meses[month - 1]; // mês vem 1-12
+}
 
   parseDuracaoMinutos(duracao: any): number {
     if (typeof duracao === 'number') return duracao;

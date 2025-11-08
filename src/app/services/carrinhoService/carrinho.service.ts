@@ -12,6 +12,9 @@ export class CarrinhoService {
   // Observables
   getCarrinho(): Observable<Carrinho> { return this.carrinho$.asObservable(); }
   getItems(): Observable<Produto[]> { return this.carrinho$.asObservable().pipe(map(c => c.produtos)); }
+  getAgendamento(): Observable<Agendamento | undefined> { return this.carrinho$.asObservable().pipe(map(c => c.agendamento)); }
+
+
 
   // adiciona (incrementa se já existir)
   addProduto(prod: Produto) {
