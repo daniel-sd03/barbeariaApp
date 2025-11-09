@@ -47,6 +47,11 @@ export const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
+    path: 'painel-produtos',
+    loadComponent: () => import('./pages/painel-produtos/painel-produtos.page').then( m => m.PainelProdutosPage),
+    canActivate: [AdminGuard]
+  },
+  {
     path: 'cadastro-servico',
     loadComponent: () => import('./pages/cadastro-servico/cadastro-servico.page').then( m => m.CadastroServicoPage),
     canActivate: [AdminGuard]

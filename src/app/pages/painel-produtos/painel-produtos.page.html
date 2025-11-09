@@ -1,0 +1,40 @@
+<app-header>
+  <span titulo>Painel de Produtos</span>
+  <ion-button icon-botao [routerLink]="'/home'" botao>
+    <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
+  </ion-button>
+  <ion-button icon-botao (click)="novo()" botao>
+    <ion-icon name="add-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <ion-searchbar [(ngModel)]="termo" (ionInput)="aplicarFiltro()" placeholder="Pesquisar por nome" showCancelButton="focus" debounce="200"></ion-searchbar>
+
+  <ion-item lines="none">
+    <ion-label>
+      Página {{ currentPage }} de {{ totalPages }}
+    </ion-label>
+    <ion-button fill="outline" size="small" (click)="paginaAnterior()" [disabled]="currentPage === 1">Anterior</ion-button>
+    <ion-button fill="outline" size="small" (click)="proximaPagina()" [disabled]="currentPage >= totalPages">Próxima</ion-button>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let p of pagina; trackBy: trackById" lines="inset">
+      <ion-avatar slot="start">
+        <img [src]="p.imagem || 'assets/fotos/placeholder.jpg'" [alt]="p.nome">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ p.nome }}</h2>
+        <p>Preço: {{ p.preco | currency:'BRL':'symbol':'1.2-2' }}</p>
+        <p>Estoque: {{ p.quantidade }}</p>
+      </ion-label>
+      <ion-button fill="clear" (click)="editar(p)" aria-label="Editar">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" color="danger" (click)="confirmarExclusao(p)" aria-label="Excluir">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
