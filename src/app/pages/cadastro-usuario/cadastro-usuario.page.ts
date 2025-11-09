@@ -5,7 +5,7 @@ import { IonicModule, LoadingController, AlertController } from '@ionic/angular'
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
-import { RouterLinkWithHref } from '@angular/router';
+import { RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuarioService/usuario.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,13 +22,16 @@ export class CadastroUsuarioPage implements OnInit {
   credentials!: FormGroup;
 
   erroCadastro: string | null = null;
+  usuarioId: string | null = null;
+  modoEdicao = false;
 
   constructor(
     private fb: FormBuilder,
     private UsuarioService: UsuarioService,
     private router: Router,
     private loadingController: LoadingController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private route: ActivatedRoute
   ) {
     addIcons({ closeOutline })
   }
@@ -39,9 +42,24 @@ export class CadastroUsuarioPage implements OnInit {
       telefone: ['', Validators.required],
       cpf: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      role: ['User'],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmaSenha: ['', Validators.required]
     }, { validator: this.passwordsMatch });
+
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.usuarioId = id;
+        this.modoEdicao = true;
+        // No modo edição, removemos validação de senha
+        this.credentials.get('senha')?.clearValidators();
+        this.credentials.get('senha')?.updateValueAndValidity();
+        this.credentials.get('confirmaSenha')?.clearValidators();
+        this.credentials.get('confirmaSenha')?.updateValueAndValidity();
+        this.carregarUsuario(id);
+      }
+    });
   }
 
   passwordsMatch(group: FormGroup) {
@@ -50,7 +68,33 @@ export class CadastroUsuarioPage implements OnInit {
     return senha === confirma ? null : { notMatching: true };
   }
 
-  async cadastrar() {
+  async carregarUsuario(id: string) {
+    const loading = await this.loadingController.create({ message: 'Carregando usuário...' });
+    await loading.present();
+    try {
+      this.UsuarioService.getUsuarioById(id).subscribe({
+        next: (usuario) => {
+          this.credentials.patchValue({
+            nome: usuario.nome,
+            telefone: usuario.telefone,
+            cpf: usuario.cpf,
+            email: usuario.email,
+            role: usuario.role || 'User'
+          });
+          loading.dismiss();
+        },
+        error: (err) => {
+          console.error('[CadastroUsuarioPage] erro ao carregar usuário:', err);
+          loading.dismiss();
+        }
+      });
+    } catch (err) {
+      console.error('[CadastroUsuarioPage] erro ao carregar usuário:', err);
+      await loading.dismiss();
+    }
+  }
+
+  async salvarOuAtualizar() {
     this.erroCadastro = null;
 
     if (this.credentials.invalid) {
@@ -62,11 +106,31 @@ export class CadastroUsuarioPage implements OnInit {
     await loading.present();
 
     try {
-      const user = await this.UsuarioService.cadastrarUsuario(this.credentials.value);
-      await loading.dismiss();
-
-      if (user) {
-        this.router.navigateByUrl('/login', { replaceUrl: true });
+      if (this.modoEdicao && this.usuarioId) {
+        await this.UsuarioService.atualizarUsuario(this.usuarioId, {
+          nome: this.credentials.value.nome,
+          telefone: this.credentials.value.telefone,
+          cpf: this.credentials.value.cpf,
+          role: this.credentials.value.role
+        });
+        await loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Sucesso',
+          message: 'Usuário atualizado com sucesso.',
+          buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-usuarios']) }]
+        });
+        await alert.present();
+      } else {
+        const user = await this.UsuarioService.cadastrarUsuario(this.credentials.value);
+        await loading.dismiss();
+        if (user) {
+          const alert = await this.alertController.create({
+            header: 'Sucesso',
+            message: 'Usuário cadastrado com sucesso.',
+            buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-usuarios']) }]
+          });
+          await alert.present();
+        }
       }
     } catch (error: any) {
       await loading.dismiss();

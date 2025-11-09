@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, collection, collectionData, docData, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +37,25 @@ export class UsuarioService {
       console.error("erro ao tentar cadastrar usuário (usuario.service): " + error);
       throw error;
     }
+  }
+
+  getUsuarios(): Observable<Usuario[]> {
+    const ref = collection(this.firestore, 'usuarios');
+    return collectionData(ref, { idField: 'id' }) as Observable<Usuario[]>;
+  }
+
+  getUsuarioById(id: string): Observable<Usuario> {
+    const ref = doc(this.firestore, 'usuarios', id);
+    return docData(ref, { idField: 'id' }) as Observable<Usuario>;
+  }
+
+  async atualizarUsuario(id: string, dados: Partial<Usuario>): Promise<void> {
+    const ref = doc(this.firestore, 'usuarios', id);
+    await updateDoc(ref, dados as any);
+  }
+
+  async excluirUsuario(id: string): Promise<void> {
+    const ref = doc(this.firestore, 'usuarios', id);
+    await deleteDoc(ref);
   }
 }

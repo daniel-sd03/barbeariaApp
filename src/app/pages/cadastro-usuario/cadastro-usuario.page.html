@@ -1,12 +1,12 @@
 <app-header>
-  <span titulo>Cadastro do Usuário</span>
-  <ion-button icon-botao [routerLink]="'/login'" botao>
+  <span titulo>{{ modoEdicao ? 'Editar Usuário' : 'Cadastro do Usuário' }}</span>
+  <ion-button icon-botao [routerLink]="'/painel-usuarios'" botao>
     <ion-icon name="close-outline" size="large"></ion-icon>
   </ion-button>
 </app-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="credentials" (ngSubmit)="cadastrar()">
+  <form [formGroup]="credentials" (ngSubmit)="salvarOuAtualizar()">
 
     <!-- Nome -->
     <ion-item>
@@ -32,31 +32,43 @@
       CPF é obrigatório.
     </div>
 
-    <!-- E-mail -->
+    <!-- E-mail (desabilitado em modo de edição) -->
     <ion-item>
-      <ion-input label="E-mail" type="email" formControlName="email"></ion-input>
+      <ion-input label="E-mail" type="email" formControlName="email" [readonly]="modoEdicao"></ion-input>
     </ion-item>
     <div *ngIf="credentials.get('email')?.invalid && credentials.get('email')?.touched" class="erro-texto">
       <span *ngIf="credentials.get('email')?.errors?.['required']">E-mail é obrigatório.</span>
       <span *ngIf="credentials.get('email')?.errors?.['email']">E-mail inválido.</span>
     </div>
 
+    <!-- Perfil (somente em modo de edição) -->
+    <ng-container *ngIf="modoEdicao">
+      <ion-item>
+        <ion-select label="Perfil" formControlName="role" interface="popover">
+          <ion-select-option value="Admin">Admin</ion-select-option>
+          <ion-select-option value="User">User</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ng-container>
+
     <!-- Senha -->
-    <ion-item>
-      <ion-input label="Senha" type="password" formControlName="senha"></ion-input>
-    </ion-item>
-    <div *ngIf="credentials.get('senha')?.invalid && credentials.get('senha')?.touched" class="erro-texto">
-      <span *ngIf="credentials.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
-      <span *ngIf="credentials.get('senha')?.errors?.['minlength']">Senha deve ter no mínimo 6 caracteres.</span>
-    </div>
+    <ng-container *ngIf="!modoEdicao">
+      <ion-item>
+        <ion-input label="Senha" type="password" formControlName="senha"></ion-input>
+      </ion-item>
+      <div *ngIf="credentials.get('senha')?.invalid && credentials.get('senha')?.touched" class="erro-texto">
+        <span *ngIf="credentials.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+        <span *ngIf="credentials.get('senha')?.errors?.['minlength']">Senha deve ter no mínimo 6 caracteres.</span>
+      </div>
 
     <!-- Confirma Senha -->
-    <ion-item>
-      <ion-input label="Confirme a Senha" type="password" formControlName="confirmaSenha"></ion-input>
-    </ion-item>
-    <div *ngIf="credentials.errors?.['notMatching'] && credentials.get('confirmaSenha')?.touched" class="erro-texto">
-      Senhas não conferem.
-    </div>
+      <ion-item>
+        <ion-input label="Confirme a Senha" type="password" formControlName="confirmaSenha"></ion-input>
+      </ion-item>
+      <div *ngIf="credentials.errors?.['notMatching'] && credentials.get('confirmaSenha')?.touched" class="erro-texto">
+        Senhas não conferem.
+      </div>
+    </ng-container>
 
     <!-- Erro geral -->
     <div *ngIf="erroCadastro" class="erro-texto">
@@ -64,7 +76,7 @@
     </div>
 
     <ion-button type="submit" expand="block" class="custom-button" [disabled]="credentials.invalid">
-      Cadastrar
+      {{ modoEdicao ? 'Salvar' : 'Cadastrar' }}
     </ion-button>
   </form>
 </ion-content>
