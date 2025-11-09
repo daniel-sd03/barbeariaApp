@@ -54,7 +54,8 @@ export class ServicoService {
       return updateDoc(servicoDocRef, {
         titulo: (servico as any).titulo,
         preco: (servico as any).preco,
-        duracao: (servico as any).duracao
+        duracao: (servico as any).duracao,
+        imagem: (servico as any).imagem
       });
     } catch (error) {
       console.error("[servicoService] erro ao tentar atualizar serviço: " + error);

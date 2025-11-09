@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ToastController, LoadingController, AlertController } from '@ionic/angular';
-import { Router, RouterLink, RouterLinkWithHref } from '@angular/router';
+import { Router, RouterLink, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -20,13 +20,16 @@ export class CadastroServicoPage implements OnInit  {
   form!: FormGroup;
   isSubmitting = false;
   erroCadastro: string | null = null;
+  servicoId: string | null = null;
+  modoEdicao = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private servicoService: ServicoService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     addIcons({closeOutline});
   }
@@ -35,7 +38,17 @@ export class CadastroServicoPage implements OnInit  {
     this.form = this.formBuilder.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
       preco: ['', [Validators.required, Validators.min(0.01)]],
-      duracao: ['', [Validators.required]]
+      duracao: ['', [Validators.required]],
+      imagem: ['']
+    });
+
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.servicoId = id;
+        this.modoEdicao = true;
+        this.carregarServico(id);
+      }
     });
   }
 
@@ -45,7 +58,32 @@ export class CadastroServicoPage implements OnInit  {
   }
 
   // Método para cadastrar o serviço
-  async cadastrarServico() {
+  async carregarServico(id: string) {
+    const loading = await this.loadingCtrl.create({ message: 'Carregando serviço...' });
+    await loading.present();
+    try {
+      this.servicoService.getServicoById(id).subscribe({
+        next: (servico) => {
+          this.form.patchValue({
+            titulo: servico.titulo,
+            preco: servico.preco,
+            duracao: servico.duracao,
+            imagem: servico.imagem
+          });
+          loading.dismiss();
+        },
+        error: (err) => {
+          console.error('[CadastroServicoPage] erro ao carregar serviço:', err);
+          loading.dismiss();
+        }
+      });
+    } catch (err) {
+      console.error('[CadastroServicoPage] erro ao carregar serviço:', err);
+      await loading.dismiss();
+    }
+  }
+
+  async salvarOuAtualizar() {
     this.erroCadastro = null;
 
     // marca todos como touched para mostrar erros do template
@@ -57,32 +95,36 @@ export class CadastroServicoPage implements OnInit  {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: 'Cadastrando serviço...' });
+    const loading = await this.loadingCtrl.create({ message: this.modoEdicao ? 'Atualizando serviço...' : 'Cadastrando serviço...' });
     await loading.present();
 
     try {
-      // Prepara os dados do serviço
-      const payload: Omit<Servico, 'id'> = {
+      const dados: Omit<Servico, 'id'> = {
         titulo: this.form.value.titulo,
         preco: this.form.value.preco,
         duracao: this.form.value.duracao,
-        imagem: 'assets/default-service.jpg' // Imagem padrão para o serviço
+        imagem: this.form.value.imagem || 'assets/default-service.jpg'
       };
-
-      // Chama o serviço para cadastrar
-      await this.servicoService.cadastrarServico(payload);
-      await loading.dismiss();
-
-      // sucesso: alerta e redireciona para a home
-      const alert = await this.alertCtrl.create({
-        header: 'Sucesso',
-        message: 'Serviço cadastrado com sucesso.',
-        buttons: [{
-          text: 'OK',
-          handler: () => this.router.navigateByUrl('/', { replaceUrl: true })
-        }]
-      });
-      await alert.present();
+      if (this.modoEdicao && this.servicoId) {
+        await this.servicoService.atualizarServico({ id: this.servicoId, ...dados });
+        await loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Sucesso',
+          message: 'Serviço atualizado com sucesso.',
+          buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-servicos']) }]
+        });
+        await alert.present();
+      } else {
+        // Chama o serviço para cadastrar
+        await this.servicoService.cadastrarServico(dados);
+        await loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Sucesso',
+          message: 'Serviço cadastrado com sucesso.',
+          buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-servicos']) }]
+        });
+        await alert.present();
+      }
     } catch (erro: any) {
       await loading.dismiss();
       console.error('[CadastroServicoPage] erro ao cadastrar serviço:', erro);
