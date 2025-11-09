@@ -61,5 +61,20 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/cadastro-barbeiro/cadastro-barbeiro.page').then( m => m.CadastroBarbeiroPage),
     canActivate: [AdminGuard]
   },
+  {
+    path: 'painel-barbeiros',
+    loadComponent: () => import('./pages/painel-barbeiros/painel-barbeiros.page').then(m => m.PainelBarbeirosPage),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'painel-servicos',
+    loadComponent: () => import('./pages/painel-servicos/painel-servicos.page').then(m => m.PainelServicosPage),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'painel-usuarios',
+    loadComponent: () => import('./pages/painel-usuarios/painel-usuarios.page').then(m => m.PainelUsuariosPage),
+    canActivate: [AdminGuard]
+  },
 
 ];
