@@ -22,7 +22,7 @@
   <ion-list>
     <ion-item *ngFor="let p of pagina; trackBy: trackById" lines="inset">
       <ion-avatar slot="start">
-        <img [src]="p.imagem || 'assets/fotos/placeholder.jpg'" [alt]="p.nome">
+        <img [src]="p.imagem || IMAGENS_PADRAO.produto" [alt]="p.nome">
       </ion-avatar>
       <ion-label>
         <h2>{{ p.nome }}</h2>

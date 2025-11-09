@@ -9,7 +9,7 @@
   <ion-list>
     <ion-item class="produto-item" *ngFor="let p of (produtos$ | async); trackBy: trackById">
       <ion-thumbnail slot="start" class="card-image-box">
-        <img [src]="p.imagem" [alt]="p.nome">
+        <img [src]="p.imagem || IMAGENS_PADRAO.produto" [alt]="p.nome">
       </ion-thumbnail>
 
       <ion-label class="produto-info">

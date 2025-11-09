@@ -8,6 +8,7 @@ import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref, Router } from '@angular/router';
 import { Produto } from 'src/app/interfaces/produto';
 import { ProdutoService } from 'src/app/services/produtoService/produto.service';
+import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
 
 @Component({
   selector: 'app-painel-produtos',
@@ -17,6 +18,7 @@ import { ProdutoService } from 'src/app/services/produtoService/produto.service'
   imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class PainelProdutosPage implements OnInit {
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   termo = '';
   produtos: Produto[] = [];
   filtrados: Produto[] = [];

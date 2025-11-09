@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { Produto } from '../../interfaces/produto';
 import { ProdutoService } from '../../services/produtoService/produto.service';
 import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
+import { IMAGENS_PADRAO } from '../../config/imagens-padrao';
 
 @Component({
   selector: 'app-produtos',
@@ -21,6 +22,7 @@ import { CarrinhoService } from '../../services/carrinhoService/carrinho.service
 
 export class ProdutosPage {
   produtos$: Observable<Produto[]>;
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
 
   constructor(
     private produtoService: ProdutoService,

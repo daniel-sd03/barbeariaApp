@@ -101,7 +101,7 @@ export class CadastroProdutoPage implements OnInit {
         nome: this.form.value.nome,
         preco: Number(this.form.value.preco),
         quantidade: Number(this.form.value.quantidade) || 0,
-        imagem: this.form.value.imagem || 'assets/default-product.jpg'
+        imagem: this.form.value.imagem || ''
       };
 
       if (this.modoEdicao && this.produtoId) {
