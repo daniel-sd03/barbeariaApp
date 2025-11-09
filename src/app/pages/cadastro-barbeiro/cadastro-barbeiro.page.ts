@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLinkWithHref } from '@angular/router';
+import { Router, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
 import { BarbeiroService } from 'src/app/services/barbeiroService/barbeiro.service';
 import { Barbeiro } from 'src/app/interfaces/barbeiro';
@@ -17,14 +19,19 @@ import { Barbeiro } from 'src/app/interfaces/barbeiro';
 export class CadastroBarbeiroPage implements OnInit {
   form!: FormGroup;
   erroCadastro: string | null = null;
+  barbeiroId: string | null = null;
+  modoEdicao = false;
 
   constructor(
     private fb: FormBuilder,
     private barbeiroService: BarbeiroService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+     addIcons({closeOutline});
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -32,6 +39,15 @@ export class CadastroBarbeiroPage implements OnInit {
       telefone: ['', Validators.required],
       cpf: ['', Validators.required],
        email: ['', [Validators.required, Validators.email]],
+    });
+
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.barbeiroId = id;
+        this.modoEdicao = true;
+        this.carregarBarbeiro(id);
+      }
     });
   }
 
@@ -47,7 +63,32 @@ export class CadastroBarbeiroPage implements OnInit {
     return cpfLimpo.length === 11;
   }
 
-  async cadastrar() {
+  async carregarBarbeiro(id: string) {
+    const loading = await this.loadingCtrl.create({ message: 'Carregando barbeiro...' });
+    await loading.present();
+    try {
+      this.barbeiroService.getBarbeiroById(id).subscribe({
+        next: (barbeiro) => {
+          this.form.patchValue({
+            nome: barbeiro.nome,
+            telefone: barbeiro.telefone,
+            cpf: barbeiro.cpf,
+            email: barbeiro.email
+          });
+          loading.dismiss();
+        },
+        error: (err) => {
+          console.error('[CadastroBarbeiroPage] erro ao carregar barbeiro:', err);
+          loading.dismiss();
+        }
+      });
+    } catch (err) {
+      console.error('[CadastroBarbeiroPage] erro ao carregar barbeiro:', err);
+      await loading.dismiss();
+    }
+  }
+
+  async salvarOuAtualizar() {
     this.erroCadastro = null;
 
     // marca todos como touched para mostrar erros do template
@@ -59,7 +100,7 @@ export class CadastroBarbeiroPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: 'Cadastrando barbeiro...' });
+    const loading = await this.loadingCtrl.create({ message: this.modoEdicao ? 'Atualizando barbeiro...' : 'Cadastrando barbeiro...' });
     await loading.present();
 
     try {
@@ -70,20 +111,25 @@ export class CadastroBarbeiroPage implements OnInit {
         email: this.form.value.email,
         foto: this.form.value.foto ? this.form.value.foto : null
       };
-
-      await this.barbeiroService.cadastrarBarbeiro(payload);
-      await loading.dismiss();
-
-      // sucesso: alerta e redireciona para a home
-      const alert = await this.alertCtrl.create({
-        header: 'Sucesso',
-        message: 'Barbeiro cadastrado com sucesso.',
-        buttons: [{
-          text: 'OK',
-          handler: () => this.router.navigateByUrl('/', { replaceUrl: true })
-        }]
-      });
-      await alert.present();
+      if (this.modoEdicao && this.barbeiroId) {
+        await this.barbeiroService.atualizarBarbeiro({id: this.barbeiroId, ...payload});
+        await loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Sucesso',
+          message: 'Barbeiro atualizado com sucesso.',
+          buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-barbeiros']) }]
+        });
+        await alert.present();
+      } else {
+        await this.barbeiroService.cadastrarBarbeiro(payload);
+        await loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Sucesso',
+          message: 'Barbeiro cadastrado com sucesso.',
+          buttons: [{ text: 'OK', handler: () => this.router.navigate(['/painel-barbeiros']) }]
+        });
+        await alert.present();
+      }
     } catch (erro: any) {
       await loading.dismiss();
       console.error('[CadastroBarbeiroPage] erro ao cadastrar barbeiro:', erro);

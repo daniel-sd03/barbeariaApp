@@ -1,12 +1,12 @@
 <app-header>
-  <span titulo>Cadastro do Barbeiro</span>
-  <ion-button icon-botao [routerLink]="'/'"  botao>
+  <span titulo>{{ modoEdicao ? 'Editar Barbeiro' : 'Cadastro do Barbeiro' }}</span>
+  <ion-button icon-botao [routerLink]="'/painel-barbeiros'"  botao>
     <ion-icon name="close-outline" size="large"></ion-icon>
   </ion-button>
 </app-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="form" (ngSubmit)="cadastrar()">
+  <form [formGroup]="form" (ngSubmit)="salvarOuAtualizar()">
 
     <!-- Nome -->
     <ion-item>
@@ -47,7 +47,7 @@
     </div>
 
     <ion-button type="submit" expand="block" class="custom-button" [disabled]="form.invalid">
-      Cadastrar
+      {{ modoEdicao ? 'Salvar' : 'Cadastrar' }}
     </ion-button>
   </form>
 </ion-content>

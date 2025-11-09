@@ -1,0 +1,41 @@
+<app-header>
+  <span titulo>Painel de Barbeiros</span>
+  <ion-button icon-botao [routerLink]="'/home'" botao>
+    <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
+  </ion-button>
+  <ion-button icon-botao (click)="novo()" botao>
+    <ion-icon name="add-outline" size="large"></ion-icon>
+  </ion-button>
+</app-header>
+
+<ion-content class="ion-padding">
+  <ion-searchbar [(ngModel)]="termo" (ionInput)="aplicarFiltro()" placeholder="Pesquisar por nome ou e-mail" showCancelButton="focus" debounce="200"></ion-searchbar>
+
+  <ion-item lines="none">
+    <ion-label>
+      Página {{ currentPage }} de {{ totalPages }}
+    </ion-label>
+    <ion-button fill="outline" size="small" (click)="paginaAnterior()" [disabled]="currentPage === 1">Anterior</ion-button>
+    <ion-button fill="outline" size="small" (click)="proximaPagina()" [disabled]="currentPage >= totalPages">Próxima</ion-button>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let b of pagina; trackBy: trackById" lines="inset">
+      <ion-avatar slot="start">
+        <img [src]="b.foto || imgPadraoBoneco" [alt]="b.nome">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ b.nome }}</h2>
+        <p>E-mail: {{ b.email }}</p>
+        <p>Telefone: {{ b.telefone }}</p>
+        <p>CPF: {{ b.cpf }}</p>
+      </ion-label>
+      <ion-button fill="clear" (click)="editar(b)" aria-label="Editar">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" color="danger" (click)="confirmarExclusao(b)" aria-label="Excluir">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
