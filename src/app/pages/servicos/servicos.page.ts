@@ -10,6 +10,7 @@ import { RouterLinkWithHref } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Servico } from '../../interfaces/servico';
 import { ServicoService } from 'src/app/services/servicoService/servico.service';
+import { IMAGENS_PADRAO } from '../../config/imagens-padrao';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { ServicoService } from 'src/app/services/servicoService/servico.service'
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule,HeaderComponent, RouterLinkWithHref]
 })
-export class ServicosPage{
+export class ServicosPage{  
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   // Observable para usar com | async no template
   servicos$: Observable<Servico[]>;
 

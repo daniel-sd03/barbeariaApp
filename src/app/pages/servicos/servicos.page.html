@@ -15,7 +15,7 @@
           <!-- imagem do serviço (ion-thumbnail / ion-img para lazy loading) -->
           <ion-thumbnail slot="start" class="card-image-box">
             <!-- ion-img carrega lazy por padrão no Ionic -->
-            <ion-img [src]="servico.imagem || 'assets/fotos/placeholder.jpg'" alt="{{servico.titulo}}"></ion-img>
+            <ion-img [src]="servico.imagem || IMAGENS_PADRAO.servico" alt="{{servico.titulo}}"></ion-img>
           </ion-thumbnail>
 
           <!-- informação -->

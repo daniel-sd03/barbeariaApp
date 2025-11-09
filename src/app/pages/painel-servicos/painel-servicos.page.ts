@@ -8,6 +8,7 @@ import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref, Router } from '@angular/router';
 import { Servico } from 'src/app/interfaces/servico';
 import { ServicoService } from 'src/app/services/servicoService/servico.service';
+import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
 
 @Component({
   selector: 'app-painel-servicos',
@@ -17,6 +18,7 @@ import { ServicoService } from 'src/app/services/servicoService/servico.service'
   imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class PainelServicosPage implements OnInit {
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   termo = '';
   servicos: Servico[] = [];
   filtrados: Servico[] = [];

@@ -103,7 +103,7 @@ export class CadastroServicoPage implements OnInit  {
         titulo: this.form.value.titulo,
         preco: this.form.value.preco,
         duracao: this.form.value.duracao,
-        imagem: this.form.value.imagem || 'assets/default-service.jpg'
+        imagem: this.form.value.imagem || ""
       };
       if (this.modoEdicao && this.servicoId) {
         await this.servicoService.atualizarServico({ id: this.servicoId, ...dados });
