@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { caretForwardCircleOutline, closeOutline } from 'ionicons/icons';
+import { caretForwardCircleOutline, arrowUndoOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -24,7 +24,7 @@ export class ServicosPage{
   servicos$: Observable<Servico[]>;
 
   constructor(private servicoService: ServicoService){
-    addIcons({ caretForwardCircleOutline,closeOutline});
+    addIcons({ caretForwardCircleOutline, arrowUndoOutline });
     // Busca dinâmica do Firestore via Service
     this.servicos$ = this.servicoService.getServicos();
   }
