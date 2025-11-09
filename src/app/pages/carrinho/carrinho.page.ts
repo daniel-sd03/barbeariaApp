@@ -19,6 +19,7 @@ import { OrdemServicoService } from 'src/app/services/ordemServicoService/ordem-
 import { OrdemServico } from 'src/app/interfaces/ordem-servico';
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
+import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
 
 @Component({
   selector: 'app-carrinho-de-compra',
@@ -29,6 +30,7 @@ import { Auth } from '@angular/fire/auth';
 })
 
 export class CarrinhoPage implements OnInit, OnDestroy {
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   produtos: Produto[] = [];
   agendamento?: Agendamento;
   barbeiro?: Barbeiro;

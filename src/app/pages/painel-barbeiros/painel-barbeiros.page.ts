@@ -8,6 +8,9 @@ import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref, Router } from '@angular/router';
 import { Barbeiro } from 'src/app/interfaces/barbeiro';
 import { BarbeiroService } from 'src/app/services/barbeiroService/barbeiro.service';
+import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
+
+
 
 @Component({
   selector: 'app-painel-barbeiros',
@@ -17,9 +20,9 @@ import { BarbeiroService } from 'src/app/services/barbeiroService/barbeiro.servi
   imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class PainelBarbeirosPage implements OnInit {
-  imgPadraoBoneco = 'assets/icon/bonecoPadrao.png';
   termo = '';
   barbeiros: Barbeiro[] = [];
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   filtrados: Barbeiro[] = [];
   pagina: Barbeiro[] = [];
   currentPage = 1;

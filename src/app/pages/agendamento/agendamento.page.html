@@ -31,7 +31,7 @@
     <ion-list>
       <ion-item class="profissional-item" *ngFor="let prof of (profissionais$ | async); trackBy: trackByProf">
         <ion-thumbnail slot="start" class="card-image-box">
-          <img [src]="prof.foto || 'assets/default-barber.jpg'" alt="{{prof.nome}}">
+          <img [src]="prof.foto || IMAGENS_PADRAO.barbeiro" alt="{{prof.nome}}">
         </ion-thumbnail>
 
         <ion-label class="profissional-info">

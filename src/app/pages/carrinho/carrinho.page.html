@@ -13,7 +13,7 @@
 
       <div class="barbeiro-row">
         <ion-avatar class="barbeiro-avatar">
-          <img [src]="barbeiro?.foto || 'assets/fotos/placeholder.jpg'" alt="Foto do barbeiro" />
+          <img [src]="barbeiro?.foto || IMAGENS_PADRAO.barbeiro" alt="Foto do barbeiro" />
         </ion-avatar>
         <span class="barbeiro-nome">{{ barbeiro?.nome || 'Barbeiro' }}</span>
       </div>

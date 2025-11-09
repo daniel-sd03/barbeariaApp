@@ -15,8 +15,8 @@ import { BarbeiroService } from '../../services/barbeiroService/barbeiro.service
 import { AgendamentoService } from '../../services/agendamentoService/agendamento.service';
 import { ServicoService } from '../../services/servicoService/servico.service';
 import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
-import { Produto } from '../../interfaces/produto';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
 
 @Component({
   selector: 'app-agendamento',
@@ -27,6 +27,7 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 })
 
 export class AgendamentoPage implements OnInit {
+  IMAGENS_PADRAO = IMAGENS_PADRAO;
   mesAtual: string = '';
   servicoSelecionado?: Servico;
   clienteId?: string;

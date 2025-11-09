@@ -22,8 +22,8 @@
   <ion-list>
     <ion-item *ngFor="let b of pagina; trackBy: trackById" lines="inset">
       <ion-avatar slot="start">
-        <img [src]="b.foto || imgPadraoBoneco" [alt]="b.nome">
-      </ion-avatar>
+        <img [src]="b.foto || IMAGENS_PADRAO.barbeiro" [alt]="b.nome">
+      </ion-avatar>010
       <ion-label>
         <h2>{{ b.nome }}</h2>
         <p>E-mail: {{ b.email }}</p>
