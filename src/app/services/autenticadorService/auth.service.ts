@@ -17,12 +17,25 @@ export class AuthService {
   constructor(private router: Router, private auth: Auth,
     private firestore: Firestore) {
     onAuthStateChanged(this.auth, async (user) => {
-      if (user) {
-        const role = await this.buscarRole(user.uid);
-        this.setRole(role);
+      try {
+        if (user) {
+          // usuário autenticado: busca role e seta
+          const role = await this.buscarRole(user.uid);
+          this.setRole(role);
+        } else {
+          // usuário não autenticado: limpa role
+          this.setRole(null);
+        }
+      } catch (err) {
+        console.error('Erro ao processar onAuthStateChanged:', err);
+        // em erro, garantir limpeza
+        this.setRole(null);
+      } finally {
+        // sinaliza que o estado do usuário já foi carregado
         this.usuarioCarregado$.next(true);
       }
     });
+
   }
 
   // Login usando Firebase
@@ -58,14 +71,20 @@ export class AuthService {
   }
 
   // Logout
-  async logout() {
-    try {
-      await signOut(this.auth);
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Erro ao sair:', error);
-    }
+async logout() {
+  try {
+    await signOut(this.auth);
+
+    this.setRole(null);
+    this.usuarioCarregado$.next(true);
+
+    await this.router.navigate(['/login']);
+  } catch (error) {
+    console.error('Erro ao sair:', error);
+    this.setRole(null);
+    this.usuarioCarregado$.next(true);
   }
+}
 
   // Atualiza o BehaviorSubject de role
   private setRole(role: UserRole | null) {

@@ -8,14 +8,14 @@ export const AuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   return auth.usuarioCarregado$.pipe(
-    filter(carregado => carregado), // espera carregar o estado de autenticação
+    filter(carregado => carregado),
     take(1),
     map(() => {
       if (auth.isAuthenticated()) {
         return true;
       } else {
-        router.navigate(['/login']);
-        return false;
+        console.log('Usuário não autenticado, redirecionando para login');
+        return router.parseUrl('/login');
       }
     })
   );
