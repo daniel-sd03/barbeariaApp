@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { closeOutline } from 'ionicons/icons';
+import { arrowUndoOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
 import { RouterLinkWithHref, ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, combineLatest } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { Barbeiro } from '../../interfaces/barbeiro';
 import { Servico } from '../../interfaces/servico';
 import { Agendamento, DisponibilidadeBarbeiro } from '../../interfaces/agendamento';
@@ -58,7 +57,7 @@ export class AgendamentoPage implements OnInit {
     private carrinhoService: CarrinhoService,
     private auth: Auth
   ) {
-    addIcons({ closeOutline })
+    addIcons({ arrowUndoOutline })
     this.buildSemana();
   }
 
