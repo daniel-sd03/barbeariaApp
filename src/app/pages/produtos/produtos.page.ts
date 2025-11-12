@@ -11,6 +11,8 @@ import { Produto } from '../../interfaces/produto';
 import { ProdutoService } from '../../services/produtoService/produto.service';
 import { CarrinhoService } from '../../services/carrinhoService/carrinho.service';
 import { IMAGENS_PADRAO } from '../../config/imagens-padrao';
+import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-produtos',
@@ -26,7 +28,9 @@ export class ProdutosPage {
 
   constructor(
     private produtoService: ProdutoService,
-    private carrinhoService: CarrinhoService
+    private carrinhoService: CarrinhoService,
+    private navCtrl: NavController,
+    private router: Router
   ) {
     addIcons({closeOutline, addCircleOutline})
     this.produtos$ = this.produtoService.getProdutos();
@@ -44,4 +48,14 @@ export class ProdutosPage {
   formatPreco(valor: number) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
+
+  //Voltar para a página anterior
+  voltar() {
+    if (window.history.length > 1) {
+      this.navCtrl.back();
+    } else {
+      this.router.navigateByUrl('/home');
+   }
+}
+
 }
