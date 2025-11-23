@@ -1,6 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from 'src/app/services/autenticadorService/auth.service';
+import { UserRole } from 'src/app/interfaces/user-role.enum';
 
 export const AdminGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
@@ -11,8 +12,9 @@ export const AdminGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  if (auth.isAdmin$) {
-    return true; // logado e admin
+  const role = auth.getRole();
+  if (role === UserRole.Admin) {
+    return true;
   }
 
   router.navigate(['/home']); // logado, mas não admin

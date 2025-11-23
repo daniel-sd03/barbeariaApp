@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserRole } from 'src/app/interfaces/user-role.enum';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, map } from 'rxjs';
 import { Auth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 
@@ -26,9 +25,9 @@ export class AuthService {
           // usuário não autenticado: limpa role
           this.setRole(null);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Erro ao processar onAuthStateChanged:', err);
-        // em erro, garantir limpeza
+        console.error('Erro código:', err?.code, 'mensagem:', err?.message);
         this.setRole(null);
       } finally {
         // sinaliza que o estado do usuário já foi carregado
@@ -58,16 +57,20 @@ export class AuthService {
 
   //buscar role
   async buscarRole(uid?: string): Promise<UserRole | null> {
-    const userId = uid || this.auth.currentUser?.uid;
-    if (!userId) return null;
+    try {
+      const userId = uid || this.auth.currentUser?.uid;
+      if (!userId) return null;
 
-    const docRef = doc(this.firestore, 'usuarios', userId);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      const data = snap.data() as any;
-      return data?.role as UserRole;
+      const docRef = doc(this.firestore, 'usuarios', userId);
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        const data = snap.data() as any;
+        return data?.role as UserRole;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   // Logout
