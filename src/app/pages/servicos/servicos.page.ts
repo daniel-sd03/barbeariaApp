@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonButton, IonIcon, IonList, IonItem, IonThumbnail, IonImg, IonLabel, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { caretForwardCircleOutline, arrowUndoOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -18,7 +18,7 @@ import { IMAGENS_PADRAO } from '../../config/imagens-padrao';
   templateUrl: './servicos.page.html',
   styleUrls: ['./servicos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule,HeaderComponent, RouterLinkWithHref]
+  imports: [IonContent, IonButton, IonIcon, IonList, IonItem, IonThumbnail, IonImg, IonLabel, IonSpinner, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class ServicosPage{  
   IMAGENS_PADRAO = IMAGENS_PADRAO;

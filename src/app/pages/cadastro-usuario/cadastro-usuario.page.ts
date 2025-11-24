@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
+import { IonContent, IonItem, IonInput, IonSelect, IonSelectOption, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -15,7 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './cadastro-usuario.page.html',
   styleUrls: ['./cadastro-usuario.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref, ReactiveFormsModule]
+  imports: [IonIcon, IonContent, IonItem, IonInput, IonSelect, IonSelectOption, IonButton, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref, ReactiveFormsModule]
 })
 
 export class CadastroUsuarioPage implements OnInit {

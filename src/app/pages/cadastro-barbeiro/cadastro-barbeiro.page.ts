@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
-import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
+import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -14,7 +15,7 @@ import { Barbeiro } from 'src/app/interfaces/barbeiro';
   templateUrl: './cadastro-barbeiro.page.html',
   styleUrls: ['./cadastro-barbeiro.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref, ReactiveFormsModule]
+  imports: [IonIcon, IonContent, IonItem, IonInput, IonButton, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref, ReactiveFormsModule]
 })
 export class CadastroBarbeiroPage implements OnInit {
   form!: FormGroup;
@@ -30,7 +31,7 @@ export class CadastroBarbeiroPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-     addIcons({closeOutline});
+    addIcons({ closeOutline });
   }
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class CadastroBarbeiroPage implements OnInit {
       nome: ['', Validators.required],
       telefone: ['', Validators.required],
       cpf: ['', Validators.required],
-       email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
     });
 
     this.route.queryParamMap.subscribe(params => {
@@ -46,7 +47,7 @@ export class CadastroBarbeiroPage implements OnInit {
       if (id) {
         this.barbeiroId = id;
         this.modoEdicao = true;
-        this.carregarBarbeiro(id);
+          this.carregarBarbeiro(id);
       }
     });
   }

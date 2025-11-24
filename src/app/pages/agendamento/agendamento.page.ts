@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonButton, IonList, IonItem, IonThumbnail, IonLabel, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowUndoOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -22,7 +22,7 @@ import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
   templateUrl: './agendamento.page.html',
   styleUrls: ['./agendamento.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+  imports: [IonIcon, IonContent, IonButton, IonList, IonItem, IonThumbnail, IonLabel, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 
 export class AgendamentoPage implements OnInit {

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { IonButton, IonIcon, IonContent, IonSearchbar, IonItem, IonLabel, IonList, IonAvatar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { searchOutline, trashOutline, createOutline, addOutline, arrowUndoOutline} from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -15,7 +16,7 @@ import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
   templateUrl: './painel-produtos.page.html',
   styleUrls: ['./painel-produtos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+  imports: [IonButton, IonIcon, IonContent, IonSearchbar, IonItem, IonLabel, IonList, IonAvatar, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class PainelProdutosPage implements OnInit {
   IMAGENS_PADRAO = IMAGENS_PADRAO;

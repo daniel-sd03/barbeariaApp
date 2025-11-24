@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { IonButton, IonIcon, IonContent, IonSearchbar, IonItem, IonLabel, IonList, IonAvatar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { searchOutline, trashOutline, createOutline, addOutline, arrowUndoOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -14,7 +15,7 @@ import { UsuarioService } from 'src/app/services/usuarioService/usuario.service'
   templateUrl: './painel-usuarios.page.html',
   styleUrls: ['./painel-usuarios.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+  imports: [IonButton, IonIcon, IonContent, IonSearchbar, IonItem, IonLabel, IonList, IonAvatar, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 export class PainelUsuariosPage implements OnInit {
   termo = '';

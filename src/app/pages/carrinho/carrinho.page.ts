@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { IonContent, IonCard, IonAvatar, IonList, IonItem, IonIcon, IonLabel, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline, timeOutline, addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -26,7 +27,7 @@ import { IMAGENS_PADRAO } from 'src/app/config/imagens-padrao';
   templateUrl: './carrinho.page.html',
   styleUrls: ['./carrinho.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+  imports: [IonContent, IonCard, IonAvatar, IonList, IonItem, IonIcon, IonLabel, IonButton, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 
 export class CarrinhoPage implements OnInit, OnDestroy {

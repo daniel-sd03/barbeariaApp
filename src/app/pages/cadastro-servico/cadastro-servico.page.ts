@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { Router, RouterLink, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
@@ -14,7 +15,7 @@ import { Servico } from 'src/app/interfaces/servico';
   templateUrl: './cadastro-servico.page.html',
   styleUrls: ['./cadastro-servico.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, RouterLink,  RouterLinkWithHref]
+  imports: [IonIcon, IonContent, IonItem, IonInput, IonButton, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, RouterLink,  RouterLinkWithHref]
 })
 export class CadastroServicoPage implements OnInit  {
   form!: FormGroup;

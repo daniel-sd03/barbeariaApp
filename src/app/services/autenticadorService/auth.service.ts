@@ -74,20 +74,20 @@ export class AuthService {
   }
 
   // Logout
-async logout() {
-  try {
-    await signOut(this.auth);
+  async logout() {
+    try {
+      await signOut(this.auth);
 
-    this.setRole(null);
-    this.usuarioCarregado$.next(true);
+      this.setRole(null);
+      this.usuarioCarregado$.next(true);
 
-    await this.router.navigate(['/login']);
-  } catch (error) {
-    console.error('Erro ao sair:', error);
-    this.setRole(null);
-    this.usuarioCarregado$.next(true);
+      await this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Erro ao sair:', error);
+      this.setRole(null);
+      this.usuarioCarregado$.next(true);
+    }
   }
-}
 
   // Atualiza o BehaviorSubject de role
   private setRole(role: UserRole | null) {

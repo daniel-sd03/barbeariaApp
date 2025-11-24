@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
+import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterLink, RouterLinkWithHref } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
@@ -15,7 +16,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './cadastro-produto.page.html',
   styleUrls: ['./cadastro-produto.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, RouterLink, RouterLinkWithHref]
+  imports: [IonIcon, IonContent, IonItem, IonInput, IonButton, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, RouterLink, RouterLinkWithHref]
 })
 export class CadastroProdutoPage implements OnInit {
   form!: FormGroup;

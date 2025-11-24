@@ -4,7 +4,7 @@
   import { RouterLinkWithHref } from '@angular/router';
   import { AuthService } from 'src/app/services/autenticadorService/auth.service';
   import { CommonModule } from '@angular/common';
-  import { Observable, take } from 'rxjs';
+  import { Observable } from 'rxjs';
 
   @Component({
     selector: 'app-menu',
@@ -20,7 +20,7 @@
       public readonly isAdmin$: Observable<boolean>;
 
     constructor(private auth: AuthService){
-       this.isAdmin$ = this.auth.isAdmin$;
+      this.isAdmin$ = this.auth.isAdmin$;
     }
 
     logout(){ this.auth.logout(); }

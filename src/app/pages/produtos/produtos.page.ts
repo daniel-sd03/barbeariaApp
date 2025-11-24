@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonButton, IonIcon, IonContent, IonList, IonItem, IonThumbnail, IonLabel, IonFooter, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline, addCircleOutline} from 'ionicons/icons';
 import { HeaderComponent } from '../../componentes/header/header.component';
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   templateUrl: './produtos.page.html',
   styleUrls: ['./produtos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
+  imports: [IonButton, IonIcon, IonContent, IonList, IonItem, IonThumbnail, IonLabel, IonFooter, IonToolbar, CommonModule, FormsModule, HeaderComponent, RouterLinkWithHref]
 })
 
 export class ProdutosPage {
