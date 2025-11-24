@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular';
 import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { Router, RouterLink, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
@@ -27,7 +27,6 @@ export class CadastroServicoPage implements OnInit  {
   constructor(
     private formBuilder: FormBuilder,
     private servicoService: ServicoService,
-    private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private router: Router,
     private route: ActivatedRoute
@@ -60,8 +59,6 @@ export class CadastroServicoPage implements OnInit  {
 
   // Método para cadastrar o serviço
   async carregarServico(id: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando serviço...' });
-    await loading.present();
     try {
       this.servicoService.getServicoById(id).subscribe({
         next: (servico) => {
@@ -71,16 +68,13 @@ export class CadastroServicoPage implements OnInit  {
             duracao: servico.duracao,
             imagem: servico.imagem
           });
-          loading.dismiss();
         },
         error: (err) => {
           console.error('[CadastroServicoPage] erro ao carregar serviço:', err);
-          loading.dismiss();
         }
       });
     } catch (err) {
       console.error('[CadastroServicoPage] erro ao carregar serviço:', err);
-      await loading.dismiss();
     }
   }
 
@@ -96,8 +90,6 @@ export class CadastroServicoPage implements OnInit  {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: this.modoEdicao ? 'Atualizando serviço...' : 'Cadastrando serviço...' });
-    await loading.present();
 
     try {
       const dados: Omit<Servico, 'id'> = {
@@ -108,7 +100,6 @@ export class CadastroServicoPage implements OnInit  {
       };
       if (this.modoEdicao && this.servicoId) {
         await this.servicoService.atualizarServico({ id: this.servicoId, ...dados });
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Serviço atualizado com sucesso.',
@@ -118,7 +109,6 @@ export class CadastroServicoPage implements OnInit  {
       } else {
         // Chama o serviço para cadastrar
         await this.servicoService.cadastrarServico(dados);
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Serviço cadastrado com sucesso.',
@@ -127,7 +117,6 @@ export class CadastroServicoPage implements OnInit  {
         await alert.present();
       }
     } catch (erro: any) {
-      await loading.dismiss();
       console.error('[CadastroServicoPage] erro ao cadastrar serviço:', erro);
       this.erroCadastro = 'Não foi possível concluir o cadastro do serviço.\nTente novamente. Se o problema persistir, entre em contato com nossa equipe de desenvolvimento.';
     }

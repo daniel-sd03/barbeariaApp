@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { IonContent, IonItem, IonInput, IonSelect, IonSelectOption, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
@@ -30,7 +30,6 @@ export class CadastroUsuarioPage implements OnInit {
     private fb: FormBuilder,
     private UsuarioService: UsuarioService,
     private router: Router,
-    private loadingController: LoadingController,
     private alertController: AlertController,
     private route: ActivatedRoute
   ) {
@@ -70,8 +69,6 @@ export class CadastroUsuarioPage implements OnInit {
   }
 
   async carregarUsuario(id: string) {
-    const loading = await this.loadingController.create({ message: 'Carregando usuário...' });
-    await loading.present();
     try {
       this.UsuarioService.getUsuarioById(id).subscribe({
         next: (usuario) => {
@@ -82,16 +79,13 @@ export class CadastroUsuarioPage implements OnInit {
             email: usuario.email,
             role: usuario.role || 'User'
           });
-          loading.dismiss();
         },
         error: (err) => {
           console.error('[CadastroUsuarioPage] erro ao carregar usuário:', err);
-          loading.dismiss();
         }
       });
     } catch (err) {
       console.error('[CadastroUsuarioPage] erro ao carregar usuário:', err);
-      await loading.dismiss();
     }
   }
 
@@ -103,8 +97,6 @@ export class CadastroUsuarioPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingController.create();
-    await loading.present();
 
     try {
       if (this.modoEdicao && this.usuarioId) {
@@ -114,7 +106,6 @@ export class CadastroUsuarioPage implements OnInit {
           cpf: this.credentials.value.cpf,
           role: this.credentials.value.role
         });
-        await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Sucesso',
           message: 'Usuário atualizado com sucesso.',
@@ -123,7 +114,6 @@ export class CadastroUsuarioPage implements OnInit {
         await alert.present();
       } else {
         const user = await this.UsuarioService.cadastrarUsuario(this.credentials.value);
-        await loading.dismiss();
         if (user) {
           const alert = await this.alertController.create({
             header: 'Sucesso',
@@ -134,7 +124,6 @@ export class CadastroUsuarioPage implements OnInit {
         }
       }
     } catch (error: any) {
-      await loading.dismiss();
 
       const erroObj = this.tratarErro(error);
       this.erroCadastro = erroObj.message;

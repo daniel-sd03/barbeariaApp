@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
@@ -26,7 +26,6 @@ export class CadastroBarbeiroPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private barbeiroService: BarbeiroService,
-    private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private router: Router,
     private route: ActivatedRoute
@@ -65,8 +64,6 @@ export class CadastroBarbeiroPage implements OnInit {
   }
 
   async carregarBarbeiro(id: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando barbeiro...' });
-    await loading.present();
     try {
       this.barbeiroService.getBarbeiroById(id).subscribe({
         next: (barbeiro) => {
@@ -76,16 +73,13 @@ export class CadastroBarbeiroPage implements OnInit {
             cpf: barbeiro.cpf,
             email: barbeiro.email
           });
-          loading.dismiss();
         },
         error: (err) => {
           console.error('[CadastroBarbeiroPage] erro ao carregar barbeiro:', err);
-          loading.dismiss();
         }
       });
     } catch (err) {
       console.error('[CadastroBarbeiroPage] erro ao carregar barbeiro:', err);
-      await loading.dismiss();
     }
   }
 
@@ -101,8 +95,6 @@ export class CadastroBarbeiroPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: this.modoEdicao ? 'Atualizando barbeiro...' : 'Cadastrando barbeiro...' });
-    await loading.present();
 
     try {
       const payload: Omit<Barbeiro, 'id'> = {
@@ -114,7 +106,6 @@ export class CadastroBarbeiroPage implements OnInit {
       };
       if (this.modoEdicao && this.barbeiroId) {
         await this.barbeiroService.atualizarBarbeiro({id: this.barbeiroId, ...payload});
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Barbeiro atualizado com sucesso.',
@@ -123,7 +114,6 @@ export class CadastroBarbeiroPage implements OnInit {
         await alert.present();
       } else {
         await this.barbeiroService.cadastrarBarbeiro(payload);
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Barbeiro cadastrado com sucesso.',
@@ -132,7 +122,6 @@ export class CadastroBarbeiroPage implements OnInit {
         await alert.present();
       }
     } catch (erro: any) {
-      await loading.dismiss();
       console.error('[CadastroBarbeiroPage] erro ao cadastrar barbeiro:', erro);
       this.erroCadastro = 'Não foi possível concluir o cadastro do barbeiro.\nTente novamente. Se o problema persistir, entre em contato com nossa equipe de desenvolvimento.';
     }

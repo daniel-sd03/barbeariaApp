@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { IonContent, IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterLink, RouterLinkWithHref } from '@angular/router';
 import { addIcons } from 'ionicons';
@@ -27,7 +27,6 @@ export class CadastroProdutoPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private produtoService: ProdutoService,
-    private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private router: Router,
     private route: ActivatedRoute
@@ -60,8 +59,6 @@ export class CadastroProdutoPage implements OnInit {
   }
 
   private async carregarProduto(id: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando produto...' });
-    await loading.present();
     try {
        const produto = await firstValueFrom(this.produtoService.getProdutoById(id));
       if (produto) {
@@ -72,9 +69,7 @@ export class CadastroProdutoPage implements OnInit {
           imagem: produto.imagem || ''
         });
       }
-      await loading.dismiss();
     } catch (erro) {
-      await loading.dismiss();
       console.error('[CadastroProdutoPage] erro ao carregar produto:', erro);
       this.erroCadastro = 'Não foi possível carregar os dados do produto para edição.';
     }
@@ -93,8 +88,6 @@ export class CadastroProdutoPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: this.modoEdicao ? 'Atualizando produto...' : 'Cadastrando produto...' });
-    await loading.present();
 
     try {
       // Prepara os dados do produto
@@ -108,7 +101,6 @@ export class CadastroProdutoPage implements OnInit {
       if (this.modoEdicao && this.produtoId) {
         // Atualiza produto existente
         await this.produtoService.atualizarProduto({ id: this.produtoId, ...payload });
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Produto atualizado com sucesso.',
@@ -118,7 +110,6 @@ export class CadastroProdutoPage implements OnInit {
       } else {
         // Cadastra novo produto
         await this.produtoService.cadastrarProduto(payload);
-        await loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Sucesso',
           message: 'Produto cadastrado com sucesso.',
@@ -127,7 +118,6 @@ export class CadastroProdutoPage implements OnInit {
         await alert.present();
       }
     } catch (erro: any) {
-      await loading.dismiss();
       console.error('[CadastroProdutoPage] erro ao salvar/atualizar produto:', erro);
       this.erroCadastro = this.modoEdicao
         ? 'Não foi possível atualizar o produto. Tente novamente.'
